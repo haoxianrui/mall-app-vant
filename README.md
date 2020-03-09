@@ -1,6 +1,6 @@
-# fly-mall-webapp
+# shop-app
 
-> 社区微商城
+> 社区微商城移动端
 
 ## Build Setup
 
