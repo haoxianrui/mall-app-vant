@@ -14,6 +14,7 @@
             <van-tabbar-item v-for="(item,index) in tabbars"
                              :key="index" :id="item.name=='cart'?'shop-cart':''"
                              :info="item.name=='cart' ? 5: ''"
+                             @click="handleTabClick(index,item.name)"
             >
                 <span :class="currentIndex==index? active :''">{{item.title}}</span>
                 <img
@@ -33,13 +34,13 @@
         },
         created () {
             //通过路由跳转绑定Tabbar的选中
-            this.tabbarSelected(this.$route.name);
+            this.handleTabbarSelected(this.$route.name);
         },
         watch: {
             // 监听路由变化,保证路由跳转Tabbar选中正常
             $route: {
-                handler(val, oldval) {
-                    this.tabbarSelected(val.name);
+                handler(val) {
+                    this.handleTabbarSelected(val.name);
                 }
             },
             deep: true
@@ -80,7 +81,14 @@
         },
 
         methods: {
-            tabbarSelected(item) {
+            // tab点击切换页面
+            handleTabClick(index,tabName){
+                console.log(tabName)
+                this.currentIndex = index;
+                this.$router.push(tabName);
+            },
+            // 监听路由变化，保证路由跳转Tabbar选中正常
+            handleTabbarSelected(item) {
                 const mapType = {
                     home: 0,
                     category: 1,

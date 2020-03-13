@@ -1,6 +1,6 @@
 <template>
     <div>
-        这是主页
+        用户
     </div>
 </template>
 

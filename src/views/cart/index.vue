@@ -1,6 +1,6 @@
 <template>
     <div>
-        这是主页
+        购物车
     </div>
 </template>
 

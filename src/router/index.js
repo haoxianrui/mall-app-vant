@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+
+// 解决多次点击重复路由报错
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
+
 Vue.use(Router)
 
 const router = new Router({
@@ -30,8 +37,25 @@ const router = new Router({
             meta: {
                 keepAlive: true
             }
+        },{
+            path: 'category',
+            name: 'category',
+            component :() => import("@/views/category"),
+            meta:{
+                keepAlive: true
+            }
+        },{
+            path: 'cart',
+            name: 'cart',
+            component:()=>import("@/views/cart"),
+            meta:{
+                keepAlive: true
+            }
+        },{
+            path: 'mine',
+            name :'mine',
+            component : ()=>import("@/views/mine")
         }
-
         ]
     }]
 
