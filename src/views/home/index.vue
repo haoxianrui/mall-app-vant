@@ -5,7 +5,17 @@
                 <!-- 轮播图 -->
                 <Swipe :swipe-data="swipeData"/>
             </div>
-            <Grid :grid-data="gridData"/>
+            <!-- 分类导航 -->
+            <Nav :nav-data="navData"/>
+
+            <!-- 秒杀专区 -->
+            <Sec />
+
+            <!-- 推荐专区 -->
+            <!-- <rec /> -->
+
+            <!-- 回到顶部按钮 -->
+            <v-top/>
         </div>
         <!-- 数据加载提示gif -->
         <Loading :show="isShowLoading"/>
@@ -16,7 +26,8 @@
     import {getHomeData} from "@/api/home"
     import Loading from '@/components/loading/LoadingGif'
     import Swipe from './components/swipe'
-    import Grid from './components/grid'
+    import Nav from './components/nav'
+    import Sec from './components/sec'
 
     export default {
         created() {
@@ -28,13 +39,15 @@
             return {
                 isShowLoading: true,       // 是否加载动画
                 swipeData: [],             // 轮播图数据
-                gridData: [],              // 宫格数据
+                navData: [],               // 分类宫格数据
+                secGoods:[]        // 秒杀商品
             }
         },
         components: {
             Loading,
             Swipe,
-            Grid
+            Nav,
+            Sec
         },
         methods: {
             async _initData() {
@@ -44,8 +57,7 @@
                 this.swipeData = data.list[0].icon_list
 
                 // 宫格数据
-                this.gridData = data.list[2].icon_list
-
+                this.navData = data.list[2].icon_list
 
                 // 关闭Loading
                 this.isShowLoading = false
@@ -58,7 +70,6 @@
     #home {
         background-color: "#f5f5f5";
         padding-bottom: 3rem;
-
         .head {
             margin-top: -3rem;
             width: 100%;

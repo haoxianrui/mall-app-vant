@@ -6,6 +6,10 @@ import store from './store'
 // 全局引入vant
 import '@/plugins/vant'
 
+// 注册为全局组件
+import VTop from './components/backToTop'
+Vue.component('v-top', VTop);
+
 new Vue({
   el: '#app',
   router,

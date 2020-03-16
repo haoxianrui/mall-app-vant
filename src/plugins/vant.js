@@ -2,7 +2,7 @@
 
 import Vue from 'vue'
 
-// Tabbar
+// Tabbar底部
 import { Tabbar, TabbarItem } from 'vant';
 Vue.use(Tabbar).use(TabbarItem);
 
@@ -19,6 +19,19 @@ Vue.use(Swipe).use(SwipeItem)
 import {Lazyload} from "vant";
 Vue.use(Lazyload)
 
+// 栅栏宫格
+import {Grid, GridItem} from 'vant';
+Vue.use(Grid).use(GridItem);
+
+// icon图标
+import { Icon } from "vant";
+Vue.use(Icon)
 
 
+// panel面板
+import { Panel } from 'vant';
+Vue.use(Panel);
 
+// 倒计时
+import { CountDown } from 'vant';
+Vue.use(CountDown);

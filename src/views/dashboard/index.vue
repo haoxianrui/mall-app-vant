@@ -1,40 +1,34 @@
 <!--项目起始页-->
 <template>
     <div id="dashboard">
-
         <!-- 按需缓存需要缓存的页面，在router中设置router的元信息meta的keepAlive -->
         <keep-alive>
             <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
         <router-view v-if="!$route.meta.keepAlive"></router-view>
 
-        <van-tabbar v-model="active"
-                    :safe-area-inset-bottom=true
-                    active-color="#75a342">
-            <van-tabbar-item v-for="(item,index) in tabbars"
-                             :key="index" :id="item.name=='cart'?'shop-cart':''"
-                             :info="item.name=='cart' ? goodsNum : ''"
-                             @click="handleTabClick(index,item.name)"
-            >
-                <span :class="currentIndex==index? active :''">{{item.title}}</span>
-                <img
-                        slot="icon"
-                        slot-scope="props"
-                        :src="props.active ? item.active : item.inactive"
-                >
-            </van-tabbar-item>
-        </van-tabbar>
+        <div id="tabbar">
+            <van-tabbar v-model="active">
+                <van-tabbar-item v-for="(item,index) in tabbars"
+                                 :id="item.name=='cart'?'shop-cart':''"
+                                 :info="item.name=='cart' ? goodsNum : ''"
+                                 :icon ="item.icon"
+                                 @click="handleTabClick(index,item.name)"
+                ></van-tabbar-item>
+            </van-tabbar>
+        </div>
     </div>
 </template>
 
 <script>
-    import {mapState,mapMutations }  from 'vuex'
+    import {mapState, mapMutations} from 'vuex'
+
     export default {
         name: "dashboard",
-        created () { // dom加载完成之前
+        created() { // dom加载完成之前
             this.handleTabbarSelected(this.$route.name) // 通过路由跳转绑定Tabbar的选中
         },
-        mounted () { // dom加载完成之后
+        mounted() { // dom加载完成之后
             this._initData()
         },
         watch: {
@@ -46,14 +40,14 @@
             },
             deep: true
         },
-        computed:{ // 计算属性,类似过滤器，对绑定的view的数据进行处理
+        computed: { // 计算属性,类似过滤器，对绑定的view的数据进行处理
             ...mapState(['shopCart']),
-            goodsNum(){
-                let num=0
-                Object.values(this.shopCart).forEach((goods,index)=>{
-                    num+=goods.num
+            goodsNum() {
+                let num = 0
+                Object.values(this.shopCart).forEach((goods, index) => {
+                    num += goods.num
                 })
-                if(num>0){
+                if (num > 0) {
                     return num;
                 }
             }
@@ -66,27 +60,22 @@
                     {
                         name: "home",
                         title: '首页',
-                        active: require("@/assets/images/tabbar/home-active.png"),
-                        inactive: require("@/assets/images/tabbar/home-inactive.png")
+                        icon: "wap-home"
                     },
                     {
                         name: "category",
                         title: '分类',
-                        active: require("@/assets/images/tabbar/category-active.png"),
-                        inactive: require("@/assets/images/tabbar/category-inactive.png")
+                        icon: "wap-nav"
                     },
                     {
                         name: "cart",
                         title: '购物车',
-                        active: require("@/assets/images/tabbar/shoppingcart-active.png"),
-                        inactive: require("@/assets/images/tabbar/shoppingcart-inactive.png"),
-                        num: 5
+                        icon: "cart"
                     },
                     {
-                        name: "mine",
+                        name: "user",
                         title: '我的',
-                        active: require("@/assets/images/tabbar/mine-active.png"),
-                        inactive: require("@/assets/images/tabbar/mine-inactive.png")
+                        icon:'manager'
                     }
 
                 ]
@@ -94,14 +83,14 @@
         },
 
         methods: {
-            ...mapMutations(['INIT_USER_INFO','INIT_SHOP_CART']),
+            ...mapMutations(['INIT_USER_INFO', 'INIT_SHOP_CART']),
             // 页面加载初始化用户信息和购物车数据
-            _initData(){
+            _initData() {
                 this.INIT_USER_INFO()
                 this.INIT_SHOP_CART()
             },
             // tab点击切换页面
-            handleTabClick(index,tabName){
+            handleTabClick(index, tabName) {
                 console.log(tabName)
                 this.currentIndex = index;
                 this.$router.push(tabName);
@@ -120,6 +109,32 @@
     }
 </script>
 
-<style scoped>
+<style lanuage="less" scoped>
+
+    @media only screen and (min-width: 768px) {
+        body{background: #f6f6f6;}
+        #app{width: 640px;margin: 0 auto;}
+        .van-tabbar,.van-goods-action{width: 640px;left: 50%;margin-left: -320px;}
+        .van-popup{width:400px !important;}
+    }
+
+    .van-tabbar-item--active{
+        color: #F75B52 !important;
+    }
+    .van-tabbar-item__icon{
+        font-size: 20px;
+    }
+    .van-tabbar-item:active{
+        background: #f6f6f6;
+    }
+    .van-tabbar-item__icon:active,.van-tabbar-item__text:active{
+        color: #F75B52;
+    }
+    .van-tabbar--fixed{
+        z-index: 999;
+    }
+    .van-tabbar-item .van-icon-search{
+        font-weight: 600;
+    }
 
 </style>

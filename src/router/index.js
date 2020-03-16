@@ -52,9 +52,9 @@ const router = new Router({
                 keepAlive: true
             }
         },{
-            path: 'mine',
-            name :'mine',
-            component : ()=>import("@/views/mine")
+            path: 'user',
+            name :'user',
+            component : ()=>import("@/views/user")
         }
         ]
     }]
