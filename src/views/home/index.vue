@@ -9,7 +9,7 @@
             <Nav :nav-data="navData"/>
 
             <!-- 秒杀专区 -->
-            <Sec />
+            <Seckill :seckill-goods-data="seckillGoodsData"/>
 
             <!-- 推荐专区 -->
             <!-- <rec /> -->
@@ -27,7 +27,7 @@
     import Loading from '@/components/loading/LoadingGif'
     import Swipe from './components/swipe'
     import Nav from './components/nav'
-    import Sec from './components/sec'
+    import Seckill from './components/seckill'
 
     export default {
         created() {
@@ -40,14 +40,14 @@
                 isShowLoading: true,       // 是否加载动画
                 swipeData: [],             // 轮播图数据
                 navData: [],               // 分类宫格数据
-                secGoods:[]        // 秒杀商品
+                seckillGoodsData:[]        // 秒杀商品
             }
         },
         components: {
             Loading,
             Swipe,
             Nav,
-            Sec
+            Seckill
         },
         methods: {
             async _initData() {
@@ -56,8 +56,11 @@
                 // 轮播数据
                 this.swipeData = data.list[0].icon_list
 
-                // 宫格数据
+                // 分类导航宫格数据
                 this.navData = data.list[2].icon_list
+
+                // 秒杀商品数据
+                this.seckillGoodsData =data.list[3].product_list
 
                 // 关闭Loading
                 this.isShowLoading = false

@@ -2,7 +2,11 @@
     <div class="scrollTop"
          v-show="showTop"
          @click="toTop">
-        <van-icon name="arrow" class="backtotop" />
+        <div class="backtotop">
+            <van-icon name="arrow-up"  />
+
+        </div>
+
     </div>
 </template>
 <script>
@@ -52,10 +56,16 @@
         }
     }
 </script>
-<style scoped>
+<style lang="less" scoped>
     .backtotop {
         width: 2.5rem;
         height: 2.5rem;
+        border-radius: 50%;
+        background: #ffffff;
+        .van-icon{
+            font-size: 20px;
+            margin: 10px;
+        }
     }
     .scrollTop {
         right: 0;

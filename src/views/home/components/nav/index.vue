@@ -1,6 +1,6 @@
 <!-- 分类宫格 -->
 <template>
-    <van-grid id="nav" :column-num="5">
+    <van-grid id="nav" :column-num="5" :border="false">
         <van-grid-item
                 v-for="(item,index) in navData"
                 :key="item.cid"
