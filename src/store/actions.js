@@ -1,5 +1,5 @@
 import {USER_INFO} from "@/store/mutation-type"
-import {getLocalStore} from '@/utils/config/global'
+import {getLocalStore} from '@/utils/global'
 
 export default {
     // 同步用户信息

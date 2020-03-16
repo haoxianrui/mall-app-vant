@@ -1,7 +1,7 @@
 {
   "name": "shop-app",
   "version": "1.0.0",
-  "description": "社区微商城",
+  "description": "社区微商城移动端",
   "author": "fly4j",
   "private": true,
   "scripts": {
@@ -24,6 +24,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "less": "^3.8.1",
     "less-loader": "^5.0.0",
+    "mockjs": "^1.1.0",
     "svg-sprite-loader": "^4.1.6",
     "vue-template-compiler": "^2.6.10"
   }

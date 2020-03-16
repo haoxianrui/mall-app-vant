@@ -13,7 +13,7 @@
                     active-color="#75a342">
             <van-tabbar-item v-for="(item,index) in tabbars"
                              :key="index" :id="item.name=='cart'?'shop-cart':''"
-                             :info="item.name=='cart' ? 5: ''"
+                             :info="item.name=='cart' ? goodsNum : ''"
                              @click="handleTabClick(index,item.name)"
             >
                 <span :class="currentIndex==index? active :''">{{item.title}}</span>
@@ -28,13 +28,14 @@
 </template>
 
 <script>
+    import {mapState,mapMutations }  from 'vuex'
     export default {
         name: "dashboard",
-        mounted () {
+        created () { // dom加载完成之前
+            this.handleTabbarSelected(this.$route.name) // 通过路由跳转绑定Tabbar的选中
         },
-        created () {
-            //通过路由跳转绑定Tabbar的选中
-            this.handleTabbarSelected(this.$route.name);
+        mounted () { // dom加载完成之后
+            this._initData()
         },
         watch: {
             // 监听路由变化,保证路由跳转Tabbar选中正常
@@ -44,6 +45,18 @@
                 }
             },
             deep: true
+        },
+        computed:{ // 计算属性,类似过滤器，对绑定的view的数据进行处理
+            ...mapState(['shopCart']),
+            goodsNum(){
+                let num=0
+                Object.values(this.shopCart).forEach((goods,index)=>{
+                    num+=goods.num
+                })
+                if(num>0){
+                    return num;
+                }
+            }
         },
         data() {
             return {
@@ -81,6 +94,12 @@
         },
 
         methods: {
+            ...mapMutations(['INIT_USER_INFO','INIT_SHOP_CART']),
+            // 页面加载初始化用户信息和购物车数据
+            _initData(){
+                this.INIT_USER_INFO()
+                this.INIT_SHOP_CART()
+            },
             // tab点击切换页面
             handleTabClick(index,tabName){
                 console.log(tabName)

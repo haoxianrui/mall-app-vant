@@ -12,3 +12,6 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+// 引入mock
+require('./mock');
