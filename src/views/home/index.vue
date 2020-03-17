@@ -60,7 +60,7 @@
                 this.navData = data.list[2].icon_list
 
                 // 秒杀商品数据
-                this.seckillGoodsData =data.list[3].product_list
+                this.seckillGoodsData =data.seckillGoodsList
 
                 // 关闭Loading
                 this.isShowLoading = false

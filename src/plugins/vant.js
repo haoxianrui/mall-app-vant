@@ -62,3 +62,8 @@ Vue.use(Card);
 // 按钮
 import {Button} from 'vant'
 Vue.use(Button)
+
+
+// 导航栏
+import { NavBar } from 'vant';
+Vue.use(NavBar);

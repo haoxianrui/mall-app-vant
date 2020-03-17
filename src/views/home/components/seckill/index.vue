@@ -16,12 +16,13 @@
             </van-count-down>
             <div class="more" @click="handleMoreClick">更多</div>
         </div>
-        <seckill-goods :seckill-goods-data="seckillGoodsData"/>
+        <!-- 秒杀商品列表 -->
+        <seckill-goods-list :seckill-goods-data="seckillGoodsData"/>
     </div>
 </template>
 
 <script>
-    import SeckillGoods from './goods'
+    import SeckillGoodsList from './goodsList'
 
     export default {
         name: "seckill",
@@ -30,11 +31,12 @@
         },
         data() {
             return {
+                // 倒计时时间设置
                 time: 30 * 60 * 1000 * 100
             }
         },
         components: {
-            SeckillGoods
+            SeckillGoodsList
         },
         methods: {
             handleMoreClick() {
