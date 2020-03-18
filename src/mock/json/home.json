@@ -15,8 +15,7 @@
         "price": "2.00",
         "originPrice": "10.00",
         "image": "https://img.yzcdn.cn/vant/apple-1.jpg",
-        "totalNum": 100,
-        "soldNum": 87,
+        "stock": 100,
         "images": [
           "https://img.yzcdn.cn/vant/apple-1.jpg",
           "https://img.yzcdn.cn/vant/apple-5.jpg"
@@ -29,8 +28,7 @@
         "price": "2.00",
         "originPrice": "10.00",
         "image": "https://img.yzcdn.cn/vant/apple-2.jpg",
-        "totalNum": 100,
-        "soldNum": 87,
+        "stock": 99,
         "images": [
           "https://img.yzcdn.cn/vant/apple-2.jpg",
           "https://img.yzcdn.cn/vant/apple-6.jpg"
@@ -43,8 +41,7 @@
         "price": "2.00",
         "originPrice": "10.00",
         "image": "https://img.yzcdn.cn/vant/apple-3.jpg",
-        "totalNum": 100,
-        "soldNum": 87,
+        "stock": 98,
         "images": [
           "https://img.yzcdn.cn/vant/apple-3.jpg",
           "https://img.yzcdn.cn/vant/apple-7.jpg"
@@ -57,8 +54,7 @@
         "price": "2.00",
         "originPrice": "10.00",
         "image": "https://img.yzcdn.cn/vant/apple-4.jpg",
-        "totalNum": 100,
-        "soldNum": 87,
+        "stock": 97,
         "images": [
           "https://img.yzcdn.cn/vant/apple-4.jpg",
           "https://img.yzcdn.cn/vant/apple-8.jpg"

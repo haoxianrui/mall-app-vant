@@ -67,3 +67,16 @@ Vue.use(Button)
 // 导航栏
 import { NavBar } from 'vant';
 Vue.use(NavBar);
+
+// 上拉菜单
+import { ActionSheet } from 'vant';
+Vue.use(ActionSheet);
+
+// 单元格
+import { Cell, CellGroup } from 'vant';
+Vue.use(Cell).use(CellGroup);
+
+
+import { GoodsAction, GoodsActionIcon, GoodsActionButton } from 'vant';
+
+Vue.use(GoodsAction).use(GoodsActionButton).use(GoodsActionIcon);

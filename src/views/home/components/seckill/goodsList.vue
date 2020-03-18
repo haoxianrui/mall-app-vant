@@ -46,8 +46,7 @@
                         image: goods.image,
                         price: goods.price,
                         originPrice:goods.originPrice,
-                        totalNum:goods.totalNum,
-                        soldNum:goods.soldNum,
+                        stock:goods.stock,
                         images:goods.images,
                         isSeckill:true
                     }
