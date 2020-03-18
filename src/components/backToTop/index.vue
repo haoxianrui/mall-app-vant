@@ -2,15 +2,14 @@
     <div class="scrollTop"
          v-show="showTop"
          @click="toTop">
-        <div class="backtotop">
-            <van-icon name="arrow-up"  />
-
-        </div>
-
+        <svg-icon iconClass="backtotop"
+                  class="backtotop" />
     </div>
 </template>
 <script>
+    import SvgIcon from "../SvgIcon/index";
     export default {
+        components: { SvgIcon },
         name: 'scroll-top',
         data () {
             return {
@@ -53,19 +52,14 @@
             getScrollTop () {
                 this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
             }
-        }
+        },
+
     }
 </script>
-<style lang="less" scoped>
+<style scoped>
     .backtotop {
         width: 2.5rem;
         height: 2.5rem;
-        border-radius: 50%;
-        background: #ffffff;
-        .van-icon{
-            font-size: 20px;
-            margin: 10px;
-        }
     }
     .scrollTop {
         right: 0;

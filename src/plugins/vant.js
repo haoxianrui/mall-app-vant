@@ -4,49 +4,40 @@ import Vue from 'vue'
 
 // Tabbar底部
 import {Tabbar, TabbarItem} from 'vant'
-
 Vue.use(Tabbar).use(TabbarItem)
 
 // loading组件
 import {Loading} from 'vant'
-
 Vue.use(Loading)
 
 // 轮播组件
 import {Swipe, SwipeItem} from "vant"
-
 Vue.use(Swipe).use(SwipeItem)
 
 
 // 懒加载
 import {Lazyload} from "vant"
-
 Vue.use(Lazyload)
 
 // 栅栏宫格
 import {Grid, GridItem} from 'vant'
-
 Vue.use(Grid).use(GridItem)
 
 // icon图标
 import {Icon} from "vant"
-
 Vue.use(Icon)
 
 
 // panel面板
 import {Panel} from 'vant'
-
 Vue.use(Panel)
 
 // 倒计时
 import {CountDown} from 'vant'
-
 Vue.use(CountDown)
 
 // 分割线
 import {Divider} from 'vant'
-
 Vue.use(Divider)
 
 // image
@@ -73,10 +64,20 @@ import { ActionSheet } from 'vant';
 Vue.use(ActionSheet);
 
 // 单元格
-import { Cell, CellGroup } from 'vant';
-Vue.use(Cell).use(CellGroup);
+import { Cell, CellGroup,Col } from 'vant';
+Vue.use(Cell).use(CellGroup).use(Col);
 
 
+// 商品导航
 import { GoodsAction, GoodsActionIcon, GoodsActionButton } from 'vant';
-
 Vue.use(GoodsAction).use(GoodsActionButton).use(GoodsActionIcon);
+
+// 标签
+import {Tag} from 'vant';
+Vue.use(Tag);
+
+// SKU商品规格
+import {Sku} from 'vant'
+Vue.use(Sku)
+
+

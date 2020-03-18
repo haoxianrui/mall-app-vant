@@ -6,7 +6,7 @@
                 left-arrow
                 @click-left="onClickLeft"
         />
-        <!-- 商品图片轮播 -->
+        <!--  商品图片轮播 -->
         <van-swipe class="goods-swipe"
                    :autoplay="3000"
                    @change="onChange"
@@ -18,7 +18,6 @@
                 {{ current + 1 }}/{{goods.images.length}}
             </div>
         </van-swipe>
-
 
         <div class="goods-seckill" v-show="goods.isSeckill">
             <div class="left">
@@ -41,34 +40,79 @@
             </div>
         </div>
 
-        <!-- 商品基本信息 -->
-        <div class="goods-info">
-            <div class="title">{{goods.name}}</div>
-            <div class="desc"> {{goods.desc}}</div>
-            <span class="price">{{goods.price}}</span>
-            <span class="origin-price">{{goods.originPrice | moneyFormat}}</span>
-            <span class="stock">库存:{{goods.stock}}</span>
-        </div>
-
-        <van-cell-group title="分组1">
-            <van-cell title="单元格" value="内容"/>
-        </van-cell-group>
-        <van-cell-group title="分组2">
-            <van-cell title="单元格" value="内容"/>
+        <van-cell-group class="goods-cell-group">
+            <van-cell style="padding-bottom: 0" :border="false" :title="goods.name" :label="goods.desc"/>
+            <van-cell style="padding-top: 0" :border="false">
+                <van-col span="10">
+                    <span class="price">{{goods.price }}</span>
+                    <span class="origin-price">{{goods.originPrice | moneyFormat}}</span>
+                </van-col>
+                <van-col span="14" class="stock">剩余库存：{{ goods.stock }}</van-col>
+            </van-cell>
         </van-cell-group>
 
-        <van-action-sheet style="height: 200px" v-model="showServiceDesc" title="标题">
-            <div class="content">内容</div>
-        </van-action-sheet>
+        <van-cell-group class="goods-cell-group" style="margin-top: 5px">
+            <van-cell is-link :border="true" @click="onServiceClicked">
+                <van-col span="8">
+                    <template slot="default">
+                        <span style="color:#666">服务说明</span>
+                    </template>
+                </van-col>
+                <van-col span="16">
+                    <template slot="default">
+                        <span style="color:#666"><van-icon name="passed" color="#ff6034"/>无忧退货</span>
+                        <span style="color:#666"><van-icon name="passed" color="#ff6034"/>极速退款</span>
+                        <span style="color:#666"><van-icon name="passed" color="#ff6034"/>免费包邮</span>
+                    </template>
+                </van-col>
+            </van-cell>
+            <van-cell title="商品参数" is-link value="查看" @click="onAttrClicked"/>
+            <van-cell title="选择规格" is-link value="查看" @click="onSepcClicked"/>
+        </van-cell-group>
 
         <van-goods-action :safe-area-inset-bottom=true
-                          style="z-index:10000">
-            <van-goods-action-icon icon="chat-o" text="客服" color="#07c160" />
-            <van-goods-action-icon icon="cart-o" text="购物车" />
-            <van-goods-action-icon icon="star" text="已收藏" color="#ff5000" />
-            <van-goods-action-button type="warning" text="加入购物车" />
-            <van-goods-action-button type="danger" text="立即购买" />
+                          style="z-index:1999">
+            <van-goods-action-icon icon="chat-o" text="客服" color="#07c160"/>
+            <van-goods-action-icon icon="cart-o" text="购物车"/>
+            <van-goods-action-icon icon="star" text="已收藏" color="#ff5000"/>
+            <van-goods-action-button type="warning" text="加入购物车"/>
+            <van-goods-action-button type="danger" text="立即购买"/>
         </van-goods-action>
+
+        <!-- 服务描述上拉菜单 -->
+        <van-action-sheet v-model="isShowService" title="标题">
+            <div class="content">服务描述</div>
+            <div class="content">服务描述</div>
+            <div class="content">服务描述</div>
+            <div class="content">服务描述</div>
+        </van-action-sheet>
+
+        <!-- 属性上拉菜单 -->
+        <van-action-sheet v-model="isShowAttr" title="商品参数">
+            <van-cell title="商品编号" value="100001"/>
+            <van-cell title="上市年份" value="2020年"/>
+            <van-cell title="颜色" value="黑色/白色/蓝色/藏青色"/>
+            <van-cell title="尺码" value="S/M/L/XL"/>
+            <van-cell title="品牌" value="NIKE"/>
+            <van-cell title="主含材料" value="棉"/>
+            <van-cell title="适合季节" value="秋/冬"/>
+            <van-cell title="适合人群" value="青年/少年"/>
+        </van-action-sheet>
+
+        <!-- 规格上拉菜单 -->
+        <van-action-sheet v-model="isShowSpec" title="标题">
+            <van-sku
+                    v-model="isShowSpec"
+                    :sku="sku"
+                    :goods="goods"
+                    :goods-id="goods.id"
+                    :quota="quota"
+                    :hide-stock="sku.hide_stock"
+                    :initial-sku="initialSku"
+                    @buy-clicked="onBuyClicked"
+                    @add-cart="onAddCartClicked"
+            />
+        </van-action-sheet>
     </div>
 </template>
 
@@ -82,7 +126,95 @@
                 isSeckill: false,
                 goods: this.$route.query,
                 current: 0,
-                showServiceDesc: false,
+                isShowService: false,
+                isShowAttr: false,
+                isShowSpec: false,
+                quota: 1, // 限购数
+                sku: {
+                    tree: [
+                        {
+                            k: '颜色', // skuKeyName：规格类目名称
+                            v: [
+                                {
+                                    id: '1001', // skuValueId：规格值 id
+                                    name: '黑色', // skuValueName：规格值名称
+                                    imgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
+                                    previewImgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 用于预览显示的规格类目图片
+                                },
+                                {
+                                    id: '1002',
+                                    name: '白色',
+                                    imgUrl: 'https://img.yzcdn.cn/vant/apple-5.jpg',
+                                    previewImgUrl: 'https://img.yzcdn.cn/vant/apple-5.jpg',
+                                }
+                            ],
+                            k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+                        },
+                        {
+                            k: '版本', // skuKeyName：规格类目名称
+                            v: [
+                                {
+                                    id: '2001', // skuValueId：规格值 id
+                                    name: '64G', // skuValueName：规格值名称
+                                },
+                                {
+                                    id: '2002',
+                                    name: '128G',
+                                }
+                            ],
+                            k_s: 's2' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+                        }
+                    ],
+                    // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
+                    list: [
+                        {
+                            id: 3001, // skuId，下单时后端需要
+                            price: 599900, // 价格（单位分）
+                            s1: '1001', // 规格类目 k_s 为 s1 的对应规格值 id
+                            s2: '2001', // 规格类目 k_s 为 s2 的对应规格值 id
+                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
+                            stock_num: 111 // 当前 sku 组合对应的库存
+                        },
+                        {
+                            id: 3002, // skuId，下单时后端需要
+                            price: 699900, // 价格（单位分）
+                            s1: '1001', // 规格类目 k_s 为 s1 的对应规格值 id
+                            s2: '2002', // 规格类目 k_s 为 s2 的对应规格值 id
+                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
+                            stock_num: 112 // 当前 sku 组合对应的库存
+                        },
+                        {
+                            id: 3003, // skuId，下单时后端需要
+                            price: 599900, // 价格（单位分）
+                            s1: '1002', // 规格类目 k_s 为 s1 的对应规格值 id
+                            s2: '2001', // 规格类目 k_s 为 s2 的对应规格值 id
+                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
+                            stock_num: 113 // 当前 sku 组合对应的库存
+                        },
+                        {
+                            id: 3004, // skuId，下单时后端需要
+                            price: 699900, // 价格（单位分）
+                            s1: '1002', // 规格类目 k_s 为 s1 的对应规格值 id
+                            s2: '2002', // 规格类目 k_s 为 s2 的对应规格值 id
+                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
+                            stock_num: 114 // 当前 sku 组合对应的库存
+                        }
+
+                    ],
+                    price: '9999', // 默认价格（单位元）
+                    stock_num: 100, // 商品总库存
+                    collection_id: 3001, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
+                    none_sku: false, // 是否无规格商品
+                    hide_stock: false // 是否隐藏剩余库存
+                },
+                initialSku:{
+                    // 键：skuKeyStr（sku 组合列表中当前类目对应的 key 值）
+                    // 值：skuValueId（规格值 id）
+                    s1: '1001',
+                    s2: '2001',
+                    // 初始选中数量
+                    selectedNum: 1
+                }
             }
         },
         mounted() {
@@ -93,6 +225,21 @@
             },
             onChange(index) {
                 this.current = index;
+            },
+           onServiceClicked() {
+                this.isShowService = true
+            },
+           onAttrClicked() {
+                this.isShowAttr = true
+            },
+            onSepcClicked() {
+                this.isShowSpec = true
+            },
+            onBuyClicked(){
+                
+            },
+            onAddCartClicked(){
+                
             }
         }
     }
@@ -168,29 +315,21 @@
                         text-align: center;
                         background-color: #e25450;
                     }
-
-                    i {
-                        color: #e25450;
-                        padding-right: 0.2rem;
-                    }
                 }
             }
         }
 
-        .goods-info {
-            background-color: white;
-            padding: 0.5rem;
-            text-align: left;
-
-            .title {
-                color: black;
-                font-size: 0.8rem;
+        .van-cell-group {
+            .van-cell {
+                padding: 0.5rem;
             }
+        }
 
-            .desc {
-                padding: 0.5rem 0;
-                color: grey;
-                font-size: 0.6rem;
+        &-cell-group {
+            .price {
+                color: #e25450;
+                padding-right: 0.5rem;
+                font-size: 0.8rem;
             }
 
             .origin-price {
@@ -199,24 +338,15 @@
                 text-decoration: line-through;
             }
 
-            .price {
-                color: #e25450;
-                padding-right: 0.5rem;
-                font-size: 0.8rem;
-            }
-
             .stock {
                 float: right;
                 color: #e25450;
                 font-size: 0.8rem;
+                text-align: right;
             }
         }
-
-        .goods-attrs {
-            margin-top: 1rem;
-            background: #FFFFFF;
-
-
+        .van-popup--bottom.van-popup--round{
+            border-radius:0
         }
     }
 </style>

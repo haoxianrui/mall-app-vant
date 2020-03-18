@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import './assets/icons'
 
 // 全局引入vant
 import '@/plugins/vant'
