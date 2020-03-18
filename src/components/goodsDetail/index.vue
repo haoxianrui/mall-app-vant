@@ -66,14 +66,14 @@
                     </template>
                 </van-col>
             </van-cell>
-            <van-cell title="商品参数" is-link value="查看" @click="onAttrClicked"/>
-            <van-cell title="选择规格" is-link value="查看" @click="onSepcClicked"/>
+            <van-cell title="商品参数" is-link value="查看" @click="onClickAttr"/>
+            <van-cell title="选择规格" is-link value="查看" @click="onClickSepc"/>
         </van-cell-group>
 
         <van-goods-action :safe-area-inset-bottom=true
                           style="z-index:1999">
             <van-goods-action-icon icon="chat-o" text="客服" color="#07c160"/>
-            <van-goods-action-icon icon="cart-o" text="购物车"/>
+            <van-goods-action-icon icon="cart-o" text="购物车" :info="goodsNum" />
             <van-goods-action-icon icon="star" text="已收藏" color="#ff5000"/>
             <van-goods-action-button type="warning" text="加入购物车"/>
             <van-goods-action-button type="danger" text="立即购买"/>
@@ -109,14 +109,16 @@
                     :quota="quota"
                     :hide-stock="sku.hide_stock"
                     :initial-sku="initialSku"
-                    @buy-clicked="onBuyClicked"
-                    @add-cart="onAddCartClicked"
+                    @buy-clicked="onClickBuy"
+                    @add-cart="onClickAddToCart"
             />
         </van-action-sheet>
     </div>
 </template>
 
 <script>
+    import {mapState,mapMutations} from 'vuex'
+
     export default {
         data() {
             return {
@@ -219,7 +221,22 @@
         },
         mounted() {
         },
+        computed:{
+            // 监听购物车商品数量变化渲染购物车图标
+            ...mapState(['shopCart']),
+            goodsNum(){
+                let num=0;
+                Object.values(this.shopCart).forEach((goods, index) => {
+                    num += goods.num;
+                });
+                if (num > 0) {
+                    return num;
+                }
+            }
+        },
         methods: {
+
+
             onClickLeft() {
                 this.$router.go(-1)
             },
@@ -229,16 +246,16 @@
            onServiceClicked() {
                 this.isShowService = true
             },
-           onAttrClicked() {
+           onClickAttr() {
                 this.isShowAttr = true
             },
-            onSepcClicked() {
+            onClickSepc() {
                 this.isShowSpec = true
             },
-            onBuyClicked(){
+            onClickBuy(){
                 
             },
-            onAddCartClicked(){
+            onClickAddToCart(){
                 
             }
         }

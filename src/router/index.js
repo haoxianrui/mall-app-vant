@@ -37,31 +37,40 @@ const router = new Router({
             meta: {
                 keepAlive: true
             }
-        },{
+        }, {
             path: 'category',
             name: 'category',
-            component :() => import("@/views/category"),
-            meta:{
+            component: () => import("@/views/category"),
+            meta: {
                 keepAlive: true
             }
-        },{
+        }, {
             path: 'cart',
             name: 'cart',
-            component:()=>import("@/views/cart"),
-            meta:{
+            component: () => import("@/views/cart"),
+            meta: {
                 keepAlive: true
             }
-        },{
+        }, {
             path: 'user',
-            name :'user',
-            component : ()=>import("@/views/user")
-        },{
+            name: 'user',
+            component: () => import("@/views/user")
+        }, {
             // 商品详情页
             path: '/goodsDetail',
             name: 'goodsDetail',
-            component: ()=>import("@/components/goodsDetail")
+            component: () => import("@/components/goodsDetail")
         }]
-    }]
+    },
+        {
+           // 登录
+           path : '/login',
+           name : 'login',
+            component:()=>import("@/views/login")
+
+
+        }
+    ]
 
 })
 

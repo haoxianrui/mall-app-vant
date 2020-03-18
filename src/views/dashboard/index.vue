@@ -113,9 +113,7 @@
 
     @media only screen and (min-width: 768px) {
         body{background: #f6f6f6;}
-        #app{width: 640px;margin: 0 auto;}
-        .van-tabbar,.van-goods-action{width: 640px;left: 50%;margin-left: -320px;}
-        .van-popup{width:400px !important;}
+
     }
 
     .van-tabbar-item--active{
