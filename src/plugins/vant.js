@@ -80,4 +80,27 @@ Vue.use(Tag);
 import {Sku} from 'vant'
 Vue.use(Sku)
 
+// tab标签
+import { Tab, Tabs } from 'vant';
+Vue.use(Tab).use(Tabs);
 
+// 表单
+import { Form,Field } from 'vant';
+Vue.use(Form).use(Field);
+
+// 复选框
+import {Checkbox, CheckboxGroup } from 'vant';
+Vue.use(Checkbox).use(CheckboxGroup);
+
+// 提交栏
+import {SubmitBar} from 'vant';
+Vue.use(SubmitBar);
+
+// 步进器
+import {Stepper} from 'vant';
+Vue.use(Stepper);
+
+
+// 联系人卡片
+import { ContactCard, ContactList, ContactEdit } from 'vant';
+Vue.use(ContactCard).use(ContactList).use(ContactEdit);

@@ -1,119 +1,206 @@
 <template>
-    <div>
-        <van-checkbox-group class="card-goods" v-model="checkedGoods">
+    <div class="cart">
+        <van-nav-bar
+                title="购物车"
+                :fixed=true
+                :right-text="selectedCount > 0 ? '删除' : '' "
+                @click-right="onClickDeleteCartGoods"
+        >
+        </van-nav-bar>
+
+
+        <van-checkbox-group class="cart-goods"
+                            v-model="checkedGoods"
+                            ref="checkboxGroup"
+        >
             <van-checkbox
-                    class="card-goods__item"
-                    v-for="item in goods"
-                    :key="item.id"
-                    :name="item.id"
+                    class="cart-goods__item"
+                    v-for="(goods,index) in shopCart"
+                    :key="goods.id"
+                    :name="goods.id"
+                    v-model="goods.checked"
+                    @click="handleSingleSelect(goods.id)"
+                    label-disabled
             >
                 <van-card
-                        :title="item.title"
-                        :desc="item.desc"
-                        :num="item.num"
-                        :price="formatPrice(item.price)"
-                        :thumb="item.thumb"
-                />
+                        :title="goods.name"
+                        :price="goods.price"
+                        :thumb="goods.image"
+                >
+                    <template #num>
+                        <van-stepper v-model="goods.num"
+                                     @minus="handleReduceGoods(goods.id,goods.num)"
+                                     @plus="handleAddGoods(goods.id,goods.name,goods.price,goods.image)"/>
+                    </template>
+                </van-card>
             </van-checkbox>
+
+
         </van-checkbox-group>
+
+
         <van-submit-bar
                 :price="totalPrice"
-                :disabled="!checkedGoods.length"
+                :disabled="!selectedCount"
                 :button-text="submitBarText"
                 @submit="onSubmit"
-        />
+        >
+            <van-checkbox v-model="isCheckedAll">全选</van-checkbox>
+        </van-submit-bar>
+
     </div>
+
+
 </template>
 
 <script>
-    import { Checkbox, CheckboxGroup, Card, SubmitBar, Toast } from 'vant';
+    import {Toast, Dialog} from 'vant';
+    import {mapState,mapGetters, mapMutations} from 'vuex'
 
     export default {
-        components: {
-            [Card.name]: Card,
-            [Checkbox.name]: Checkbox,
-            [SubmitBar.name]: SubmitBar,
-            [CheckboxGroup.name]: CheckboxGroup
-        },
-
-        data() {
-            return {
-                checkedGoods: ['1', '2', '3'],
-                goods: [{
-                    id: '1',
-                    title: '进口香蕉',
-                    desc: '约250g，2根',
-                    price: 200,
-                    num: 1,
-                    thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg'
-                }, {
-                    id: '2',
-                    title: '陕西蜜梨',
-                    desc: '约600g',
-                    price: 690,
-                    num: 1,
-                    thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/f6aabd6ac5521195e01e8e89ee9fc63f.jpeg'
-                }, {
-                    id: '3',
-                    title: '美国伽力果',
-                    desc: '约680g/3个',
-                    price: 2680,
-                    num: 1,
-                    thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/320454216bbe9e25c7651e1fa51b31fd.jpeg'
-                }]
-            };
-        },
-
         computed: {
+            ...mapState(['shopCart']),
+            ...mapGetters({
+                totalPrice: 'SELECTED_GOODS_PRICE'
+            }),
             submitBarText() {
-                const count = this.checkedGoods.length;
-                return '结算' + (count ? `(${count})` : '');
+                const count = this.selectedCount
+                return '结算' + (count ? `(${count})` : '')
             },
-
-            totalPrice() {
-                return this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0), 0);
+            // 购物车总数量
+            totalCount() {
+                return Object.keys(this.shopCart).length
+            },
+            // 选中条数
+            selectedCount() {
+                let selectedCount = 0
+                Object.values(this.shopCart).forEach((goods, index) => {
+                    if (goods.checked) {
+                        selectedCount++
+                    }
+                })
+                return selectedCount
+            },
+            isCheckedAll: {
+                get() {
+                    let flag = this.totalCount > 0
+                    Object.values(this.shopCart).forEach(goods => {
+                        if (!goods.checked) {
+                            flag = false
+                        }
+                    })
+                    return flag
+                },
+                set(value) {
+                    let isCheckedAll = !value;
+                    this.ALL_SELECT_GOODS({isCheckedAll})
+                }
+            },
+            checkedGoods:{
+                get(){
+                    let checkedGoods=[]
+                    Object.values( this.shopCart).forEach(goods => {
+                        if (goods.checked) {
+                            checkedGoods.push(goods.id)
+                        }
+                    })
+                    return checkedGoods
+                },
+                set(value){
+                }
             }
         },
-
         methods: {
-            formatPrice(price) {
-                return (price / 100).toFixed(2);
+            ...mapMutations(['ADD_GOODS', 'REDUCE_GOODS', 'SINGLE_SELECT_GOODS', 'ALL_SELECT_GOODS', 'DELETE_SELECT_GOODS']),
+            // 购物车删除商品
+            onClickDeleteCartGoods() {
+                if (this.selectedCount > 0) {
+                    Dialog.confirm({
+                        title: '提示',
+                        message: '确认从购物车删除选中的商品？'
+                    }).then(() => {
+                        this.DELETE_SELECT_GOODS()
+                    }).catch(() => {
+                        // 取消事件
+                    })
+                }
             },
-
+            handleAddGoods(goodsId, goodsName, goodsPrice, goodsImage) {
+                this.ADD_GOODS({
+                    goodsId,
+                    goodsName,
+                    goodsPrice,
+                    goodsImage
+                })
+            },
+            handleReduceGoods(goodsId, goodsNum) {
+                if (goodsNum > 1) {
+                    this.REDUCE_GOODS({goodsId})
+                } else if (goodsNum === 1) {
+                    Dialog.confirm({
+                        title: '温馨提示',
+                        message: '确实删除该商品吗？'
+                    }).then(() => {
+                        this.REDUCE_GOODS({goodsId})
+                    }).catch(() => {
+                        // 取消事件
+                    })
+                }
+            },
+            handleSingleSelect(goodsId) {
+                this.SINGLE_SELECT_GOODS({goodsId})
+            },
             onSubmit() {
-                Toast('点击结算');
+
+                if (this.selectedCount > 0) {
+                    // 跳转到订单界面
+                    this.$router.push('/order');
+                } else {
+                    Toast({
+                        message: '请选择需要结算的商品',
+                        duration: 1000
+                    });
+                }
             }
         }
     };
 </script>
 
 <style lang="less">
-    .card-goods {
-        padding: 10px 0;
-        background-color: #fff;
+    .cart {
+        padding-top: 36px;
 
-        &__item {
-            position: relative;
-            background-color: #fafafa;
+        &-goods {
+            padding: 10px 0;
+            background-color: #fff;
 
-            .van-checkbox__label {
-                width: 100%;
-                height: auto; // temp
-                padding: 0 10px 0 15px;
-                box-sizing: border-box;
+            &__item {
+                position: relative;
+                background-color: #fafafa;
+
+                .van-checkbox__label {
+                    width: 100%;
+                    height: auto; // temp
+                    padding: 0 10px 0 15px;
+                    box-sizing: border-box;
+                }
+
+                .van-checkbox__icon {
+                    top: 50%;
+                    left: 10px;
+                    z-index: 1;
+                    position: absolute;
+                    margin-top: -10px;
+                }
+
+                .van-card__price {
+                    color: #f44;
+                }
             }
+        }
 
-            .van-checkbox__icon {
-                top: 50%;
-                left: 10px;
-                z-index: 1;
-                position: absolute;
-                margin-top: -10px;
-            }
-
-            .van-card__price {
-                color: #f44;
-            }
+        .van-submit-bar {
+            bottom: 50px;
         }
     }
 </style>

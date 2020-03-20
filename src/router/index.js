@@ -69,6 +69,12 @@ const router = new Router({
             component:()=>import("@/views/login")
 
 
+        },
+        {
+            // 订单
+            path:'/order',
+            name:'order',
+            component:()=>import("@/views/order")
         }
     ]
 

@@ -10,9 +10,6 @@
 
             <!-- 秒杀专区 -->
             <Seckill :seckill-goods-data="seckillGoodsData"/>
-            <Seckill :seckill-goods-data="seckillGoodsData"/>
-            <!-- 推荐专区 -->
-            <!-- <rec /> -->
 
             <!-- 回到顶部按钮 -->
             <v-top/>

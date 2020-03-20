@@ -73,9 +73,9 @@
         <van-goods-action :safe-area-inset-bottom=true
                           style="z-index:1999">
             <van-goods-action-icon icon="chat-o" text="客服" color="#07c160"/>
-            <van-goods-action-icon icon="cart-o" text="购物车" :info="goodsNum" />
+            <van-goods-action-icon icon="cart-o" text="购物车" @click="onClickCart" :info="goodsNum"/>
             <van-goods-action-icon icon="star" text="已收藏" color="#ff5000"/>
-            <van-goods-action-button type="warning" text="加入购物车"/>
+            <van-goods-action-button type="warning" text="加入购物车" @click="onClickAddToCart"/>
             <van-goods-action-button type="danger" text="立即购买"/>
         </van-goods-action>
 
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-    import {mapState,mapMutations} from 'vuex'
+    import {mapState, mapMutations} from 'vuex'
 
     export default {
         data() {
@@ -209,7 +209,7 @@
                     none_sku: false, // 是否无规格商品
                     hide_stock: false // 是否隐藏剩余库存
                 },
-                initialSku:{
+                initialSku: {
                     // 键：skuKeyStr（sku 组合列表中当前类目对应的 key 值）
                     // 值：skuValueId（规格值 id）
                     s1: '1001',
@@ -221,21 +221,26 @@
         },
         mounted() {
         },
-        computed:{
+        computed: {
+            ...mapState(['shopCart', 'userInfo']),
             // 监听购物车商品数量变化渲染购物车图标
-            ...mapState(['shopCart']),
-            goodsNum(){
-                let num=0;
+            goodsNum() {
+                let num = 0;
                 Object.values(this.shopCart).forEach((goods, index) => {
                     num += goods.num;
                 });
                 if (num > 0) {
                     return num;
                 }
+            },
+            userToken() {
+                if (this.userInfo) {
+                    return this.userInfo.token
+                }
             }
         },
         methods: {
-
+            ...mapMutations(['ADD_TO_CART']),
 
             onClickLeft() {
                 this.$router.go(-1)
@@ -243,20 +248,26 @@
             onChange(index) {
                 this.current = index;
             },
-           onServiceClicked() {
+            onServiceClicked() {
                 this.isShowService = true
             },
-           onClickAttr() {
+            onClickAttr() {
                 this.isShowAttr = true
             },
             onClickSepc() {
                 this.isShowSpec = true
             },
-            onClickBuy(){
-                
+            onClickBuy() {
             },
-            onClickAddToCart(){
-                
+            onClickAddToCart() {
+                this.ADD_TO_CART(this.goods)
+            },
+            onClickCart() {
+                if ( this.userToken) {
+                    this.$router.push({name: 'cart'})
+                } else {
+                    this.$router.push({name: 'login'})
+                }
             }
         }
     }
@@ -265,6 +276,7 @@
 <style lang="less" scoped>
     .goods {
         background-color: #f5f5f5;
+        padding-bottom: 50px;
 
         &-swipe {
             margin-top: 2.7rem;
@@ -362,8 +374,9 @@
                 text-align: right;
             }
         }
-        .van-popup--bottom.van-popup--round{
-            border-radius:0
+
+        .van-popup--bottom.van-popup--round {
+            border-radius: 0
         }
     }
 </style>

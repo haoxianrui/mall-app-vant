@@ -14,4 +14,19 @@ export const ADD_TO_CART = 'ADD_TO_CART';
 
 // 添加商品
 export const ADD_GOODS='ADD_GOODS';
+// 减少商品
+export const REDUCE_GOODS = 'REDUCE_GOODS';
+// 单个商品选中
+export const SINGLE_SELECT_GOODS = 'SINGLE_SELECT_GOODS';
+// 全选选中
+export const ALL_SELECT_GOODS = 'ALL_SELECT_GOODS';
+// 删除选中的商品
+export const DELETE_SELECT_GOODS = 'DELETE_SELECT_GOODS';
+
+// 选中商品的条数
+export const SELECTED_GOODS_COUNT = 'SELECTED_GOODS_COUNT';
+// 选中的商品
+export const SELECTED_GOODS = 'SELECTED_GOODS';
+// 选中商品的价格
+export const SELECTED_GOODS_PRICE = 'SELECTED_GOODS_PRICE';
 
