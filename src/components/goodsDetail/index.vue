@@ -52,7 +52,7 @@
         </van-cell-group>
 
         <van-cell-group class="goods-cell-group" style="margin-top: 5px">
-            <van-cell is-link :border="true" @click="onServiceClicked">
+            <van-cell is-link :border="true" @click="onClickService">
                 <van-col span="8">
                     <template slot="default">
                         <span style="color:#666">服务说明</span>
@@ -248,7 +248,7 @@
             onChange(index) {
                 this.current = index;
             },
-            onServiceClicked() {
+            onClickService() {
                 this.isShowService = true
             },
             onClickAttr() {

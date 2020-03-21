@@ -35,7 +35,6 @@
                 </van-card>
             </van-checkbox>
 
-
         </van-checkbox-group>
 
 
@@ -151,7 +150,6 @@
                 this.SINGLE_SELECT_GOODS({goodsId})
             },
             onSubmit() {
-
                 if (this.selectedCount > 0) {
                     // 跳转到订单界面
                     this.$router.push('/order');

@@ -7,7 +7,13 @@ import {
     REDUCE_GOODS,
     SINGLE_SELECT_GOODS,
     ALL_SELECT_GOODS,
-    DELETE_SELECT_GOODS
+    DELETE_SELECT_GOODS,
+    INIT_USER_SHOPPING_ADDRESS,
+    ADD_USER_SHOPPING_ADDRESS,
+    CHANGE_USER_SHOPPING_ADDRESS,
+    DELETE_USER_SHOPPING_ADDRESS
+
+
 } from "./mutation-type"
 import {setLocalStore, getLocalStore} from '@/utils/global'
 import {Toast} from 'vant'
@@ -27,7 +33,7 @@ export default {
     // 页面初始化获取本地用户信息
     [INIT_USER_INFO](state) {
         let userInfo = getLocalStore("userInfo")
-        if (userInfo!=='undefined') {
+        if (userInfo) {
             state.userInfo = JSON.parse(userInfo)
         }
     },
@@ -40,6 +46,8 @@ export default {
     },
     // 添加商品进购物车
     [ADD_TO_CART](state, goods) {
+        console.log(state.userInfo)
+        console.log(state.userInfo.token)
         if (state.userInfo.token) {
             setTimeout(() => {
                 this.commit('ADD_GOODS', {
@@ -157,6 +165,34 @@ export default {
         setLocalStore('shopCart', state.shopCart);
     },
 
+    //  初始化获取用户收货地址
+    [INIT_USER_SHOPPING_ADDRESS](state) {
+        let shippingAddress = getLocalStore('shippingAddress');
+        state.shippingAddress = JSON.parse(shippingAddress) || []
+    },
 
+    // 增加用户地址
+    [ADD_USER_SHOPPING_ADDRESS](state, {
+        content
+    }) {
+        state.shippingAddress = [...state.shippingAddress, content];
+        setLocalStore('shippingAddress', state.shippingAddress);
+    },
+
+    // 删除用户地址
+    [DELETE_USER_SHOPPING_ADDRESS](state, {
+        id
+    }) {
+        state.shippingAddress = state.shippingAddress.filter(item => item.id !== id)
+        setLocalStore('shippingAddress', state.shippingAddress);
+    },
+    // 修改用户地址
+    [CHANGE_USER_SHOPPING_ADDRESS](state, {
+        content
+    }) {
+        const index = state.shippingAddress.findIndex(item => item.id === content.id)
+        state.shippingAddress.splice(index, 1, content)
+        setLocalStore('shippingAddress', state.shippingAddress);
+    },
 
 }

@@ -57,24 +57,46 @@ const router = new Router({
             component: () => import("@/views/user")
         }, {
             // 商品详情页
-            path: '/goodsDetail',
+            path: 'goodsDetail',
             name: 'goodsDetail',
             component: () => import("@/components/goodsDetail")
         }]
     },
         {
-           // 登录
-           path : '/login',
-           name : 'login',
-            component:()=>import("@/views/login")
+            // 订单
+            path: '/order',
+            name: 'order',
+            component: () => import("@/views/order"),
+            children: [{
+                path: 'address',
+                name: 'addressIndex',
+                component: () => import("@/views/order/address"),
 
-
+                children: [{
+                    path: 'add',
+                    name: 'addAddress',
+                    component: () => import("@/views/order/address/add")
+                }, {
+                    path: 'edit',
+                    name: 'editAddress',
+                    component: () => import("@/views/order/address/edit")
+                }]
+            }, {
+                path: 'payment',
+                name: 'orderPayment',
+                component: () => import("@/views/order/payment"),
+                children: [{
+                    path: 'result',
+                    name: 'paymentResult',
+                    component: () => import("@/views/order/payment/result")
+                }]
+            }]
         },
         {
-            // 订单
-            path:'/order',
-            name:'order',
-            component:()=>import("@/views/order")
+            // 登录
+            path: '/login',
+            name: 'login',
+            component: () => import("@/views/login")
         }
     ]
 

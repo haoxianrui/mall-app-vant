@@ -24,7 +24,6 @@
     import {mapState, mapMutations} from 'vuex'
 
     export default {
-        name: "dashboard",
         created() { // dom加载完成之前
             this.handleTabbarSelected(this.$route.name) // 通过路由跳转绑定Tabbar的选中
         },

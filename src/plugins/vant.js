@@ -63,9 +63,9 @@ Vue.use(NavBar);
 import { ActionSheet } from 'vant';
 Vue.use(ActionSheet);
 
-// 单元格
-import { Cell, CellGroup,Col } from 'vant';
-Vue.use(Cell).use(CellGroup).use(Col);
+// 布局
+import { Cell, CellGroup,Col,Row } from 'vant';
+Vue.use(Cell).use(CellGroup).use(Col).use(Row);
 
 
 // 商品导航
@@ -104,3 +104,24 @@ Vue.use(Stepper);
 // 联系人卡片
 import { ContactCard, ContactList, ContactEdit } from 'vant';
 Vue.use(ContactCard).use(ContactList).use(ContactEdit);
+
+
+// 收货人地址
+import { AddressList ,AddressEdit } from 'vant';
+Vue.use(AddressList).use(AddressEdit);
+
+// 省市区选择
+import { Area } from 'vant';
+Vue.use(Area);
+
+// 单选框
+import { RadioGroup, Radio } from 'vant';
+Vue.use(Radio).use(RadioGroup);
+
+// 弹出层
+import {Popup} from 'vant';
+Vue.use(Popup);
+
+// 优惠券
+import { CouponCell, CouponList } from 'vant';
+Vue.use(CouponCell).use(CouponList);
