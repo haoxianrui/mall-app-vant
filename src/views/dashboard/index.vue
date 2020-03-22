@@ -90,7 +90,6 @@
             },
             // tab点击切换页面
             handleTabClick(index, tabName) {
-                console.log(tabName)
                 this.currentIndex = index;
                 this.$router.push(tabName);
             },
@@ -100,7 +99,7 @@
                     home: 0,
                     category: 1,
                     cart: 2,
-                    mine: 3
+                    user: 3
                 }
                 this.active = mapType[item]
             }

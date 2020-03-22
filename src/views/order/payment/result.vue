@@ -40,7 +40,7 @@
             <van-cell :border="false">
                 <van-row>
                     <van-col span="12" class="lt">
-                        <van-button type="default" size="small">查看订单</van-button>
+                        <van-button type="default" size="small" @click="onClickViewOrder" >查看订单</van-button>
                     </van-col>
                     <van-col span="12" class="rt">
                         <van-button type="default" size="small" to="/dashboard/home">回到首页</van-button>
@@ -68,10 +68,13 @@
         },
         methods: {
             onClickLeft() {
-                this.$router.back();
+                this.$router.back()
             },
             onClickRight() {
-                this.$router.push({name: 'home'})
+                this.$router.push({name: 'user'})
+            },
+            onClickViewOrder(){
+                this.$router.push({name:'userOrder',params:{active:'2'}})
             }
         }
     }

@@ -91,10 +91,9 @@
 </template>
 
 <script>
-    import {mapState, mapGetters, mapMutations} from 'vuex'
+    import {mapGetters} from 'vuex'
     import {coupon} from '@/api/user'
     import {Toast} from 'vant'
-
 
     export default {
         data() {

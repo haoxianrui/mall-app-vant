@@ -54,7 +54,12 @@ const router = new Router({
         }, {
             path: 'user',
             name: 'user',
-            component: () => import("@/views/user")
+            component: () => import("@/views/user"),
+            children: [{
+                path: 'order',
+                name: 'userOrder',
+                component: () => import("@/views/user/order")
+            }]
         }, {
             // 商品详情页
             path: 'goodsDetail',

@@ -23,3 +23,5 @@ require('./mock');
 
 //  全局引入 过滤器
 import '@/utils/filter'
+
+Vue.config.devtools = true
