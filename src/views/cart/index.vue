@@ -16,27 +16,28 @@
             <van-checkbox
                     class="cart-goods__item"
                     v-for="(goods,index) in shopCart"
-                    :key="goods.id"
+                    :key="index"
                     :name="goods.id"
                     v-model="goods.checked"
                     @click="handleSingleSelect(goods.id)"
                     label-disabled
             >
-                <van-card
-                        :title="goods.name"
+
+                <van-card :title="goods.name"
                         :price="goods.price"
-                        :thumb="goods.image"
-                >
+                        :thumb="goods.image">
                     <template #num>
-                        <van-stepper v-model="goods.num"
-                                     @minus="handleReduceGoods(goods.id,goods.num)"
-                                     @plus="handleAddGoods(goods.id,goods.name,goods.price,goods.image)"/>
+                        <div class="stepper">
+                            <span @click.stop="handleReduceGoods(goods.id,goods.num)">-</span>
+                            <input type="number" disabled v-model="goods.num">
+                            <span @click.stop="handleAddGoods(goods.id,goods.name, goods.price,goods.image)">+</span>
+                        </div>
+
+
                     </template>
                 </van-card>
             </van-checkbox>
-
         </van-checkbox-group>
-
 
         <van-submit-bar
                 :price="totalPrice"
@@ -54,9 +55,14 @@
 
 <script>
     import {Toast, Dialog} from 'vant';
-    import {mapState,mapGetters, mapMutations} from 'vuex'
+    import {mapState, mapGetters, mapMutations} from 'vuex'
 
     export default {
+        watch:{
+            checkedGoods:function (newVal) {
+                console.log(newVal)
+            }
+        },
         computed: {
             ...mapState(['shopCart']),
             ...mapGetters({
@@ -95,21 +101,25 @@
                     this.ALL_SELECT_GOODS({isCheckedAll})
                 }
             },
-            checkedGoods:{
-                get(){
-                    let checkedGoods=[]
-                    Object.values( this.shopCart).forEach(goods => {
+            checkedGoods: {
+                get() {
+                    let checkedGoods = []
+                    Object.values(this.shopCart).forEach(goods => {
                         if (goods.checked) {
                             checkedGoods.push(goods.id)
                         }
                     })
                     return checkedGoods
                 },
-                set(value){
+                set(value) {
                 }
             }
         },
         methods: {
+            test(){
+             alert(123)
+            },
+
             ...mapMutations(['ADD_GOODS', 'REDUCE_GOODS', 'SINGLE_SELECT_GOODS', 'ALL_SELECT_GOODS', 'DELETE_SELECT_GOODS']),
             // 购物车删除商品
             onClickDeleteCartGoods() {
@@ -193,6 +203,30 @@
 
                 .van-card__price {
                     color: #f44;
+                }
+                .van-card__title{
+                    margin-top: 10px;
+                    font-size: 14px;
+                }
+
+                .stepper span {
+                    display: inline-block;
+                    width: 1rem;
+                    height: 1.2rem;
+                    line-height: 1.2rem;
+                    text-align: center;
+                    float: left;
+                    font-size: 18px;
+                }
+                .stepper input {
+                    float: left;
+                    width: 2rem;
+                    height: 1.2rem;
+                    text-align: center;
+                    margin: 0 0.2rem;
+                    font-size: 0.8rem;
+                    background-color: #f5f5f5;
+                    border: 0;
                 }
             }
         }

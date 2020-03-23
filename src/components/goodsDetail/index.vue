@@ -109,15 +109,28 @@
                     :quota="quota"
                     :hide-stock="sku.hide_stock"
                     :initial-sku="initialSku"
-                    @buy-clicked="onClickBuy"
-                    @add-cart="onClickAddToCart"
-            />
+            >
+                <template #sku-actions="props">
+                    <div class="van-sku-actions">
+                        <van-button
+                                square
+                                size="large"
+                                type="warning"
+                                @click="onClickBuy"
+                        >
+                            积分兑换
+                        </van-button>
+                    </div>
+                </template>
+            </van-sku>
         </van-action-sheet>
+
     </div>
 </template>
 
 <script>
     import {mapState, mapMutations} from 'vuex'
+    import {Toast} from 'vant'
 
     export default {
         data() {
@@ -257,7 +270,12 @@
             onClickSepc() {
                 this.isShowSpec = true
             },
-            onClickBuy() {
+            onClickBuy(k,skuData) {
+                console.log(skuData)
+                if(!this.initialSku.s2){
+                    Toast("请选择商品属性")
+                }
+
             },
             onClickAddToCart() {
                 this.ADD_TO_CART(this.goods)
