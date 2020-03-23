@@ -18,7 +18,7 @@
         <!-- 商品列表 -->
         <van-cell-group title="购买商品">
             <van-card
-                    v-for="(item,index) in goods"
+                    v-for="(item,index) in goodsList"
                     :key="index"
                     :num="item.num"
                     :price="item.price"
@@ -114,11 +114,13 @@
         },
         created() {
             coupon().then(response => {
-                this.coupons = response.data
+                if (response.data) {
+                    this.coupons = response.data
+                }
             })
         },
         mounted() {
-
+            this._initData()
         },
         computed: {
             ...mapGetters({
@@ -127,15 +129,29 @@
                 selectedTotalPrice: 'SELECTED_GOODS_PRICE'
             }),
             actualPrice() {
-                let finalPrice = this.selectedTotalPrice+this.freight
+                let finalPrice = this.selectedTotalPrice + this.freight
                 // 是否有使用优惠券
                 if (this.chosenCoupon > -1) {
-                    finalPrice=finalPrice-this.coupons[this.chosenCoupon].value
+                    finalPrice = finalPrice - this.coupons[this.chosenCoupon].value
                 }
                 return finalPrice
+            },
+            goodsList:{
+                get(){
+                    return []
+                },
+                set(){
+
+                }
             }
         },
         methods: {
+            _initData(){
+                this.goodsList=[]
+                let g = this.$route.params.goods
+                this.goodsList.push(g)
+                console.log(this.goodsList)
+            },
             onClickLeft() {
                 this.$router.back();
             },
@@ -160,14 +176,14 @@
                 this.coupons.push(code)
             },
             onSubmit() {
-                if(!this.concat.address){
+                if (!this.concat.address) {
                     Toast({
                         message: '请选择收货地址',
                         duration: 800
                     })
-                }else{
+                } else {
                     // 提交订单逻辑 todo
-                    this.$router.push({path: '/order/payment',query:{paymentAmount :this.actualPrice}})
+                    this.$router.push({path: '/order/payment', query: {paymentAmount: this.actualPrice}})
                 }
             }
         }
@@ -179,6 +195,7 @@
         padding-top: 3rem;
 
         /*转场动画*/
+
         .router-slider-enter-active,
         .router-slider-leave-active {
             transition: all 0.3s;

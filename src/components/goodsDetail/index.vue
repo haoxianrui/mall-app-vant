@@ -66,8 +66,8 @@
                     </template>
                 </van-col>
             </van-cell>
-            <van-cell title="商品参数" is-link value="查看" @click="onClickAttr"/>
-            <van-cell title="选择规格" is-link value="查看" @click="onClickSepc"/>
+            <van-cell title="商品参数" is-link @click="onClickAttr"/>
+            <van-cell title="选择规格" is-link :value="selectedSku" @click="onClickSepc"/>
         </van-cell-group>
 
         <van-goods-action :safe-area-inset-bottom=true
@@ -76,11 +76,11 @@
             <van-goods-action-icon icon="cart-o" text="购物车" @click="onClickCart" :info="goodsNum"/>
             <van-goods-action-icon icon="star" text="已收藏" color="#ff5000"/>
             <van-goods-action-button type="warning" text="加入购物车" @click="onClickAddToCart"/>
-            <van-goods-action-button type="danger" text="立即购买"/>
+            <van-goods-action-button type="danger" text="立即购买" @click="onClickBuyNow"/>
         </van-goods-action>
 
         <!-- 服务描述上拉菜单 -->
-        <van-action-sheet v-model="isShowService" title="标题">
+        <van-action-sheet v-model="showService" title="标题">
             <div class="content">服务描述</div>
             <div class="content">服务描述</div>
             <div class="content">服务描述</div>
@@ -88,7 +88,7 @@
         </van-action-sheet>
 
         <!-- 属性上拉菜单 -->
-        <van-action-sheet v-model="isShowAttr" title="商品参数">
+        <van-action-sheet v-model="showAttr" title="商品参数">
             <van-cell title="商品编号" value="100001"/>
             <van-cell title="上市年份" value="2020年"/>
             <van-cell title="颜色" value="黑色/白色/蓝色/藏青色"/>
@@ -100,15 +100,16 @@
         </van-action-sheet>
 
         <!-- 规格上拉菜单 -->
-        <van-action-sheet v-model="isShowSpec" title="标题">
+        <van-action-sheet v-model="showSpec" title="标题">
             <van-sku
-                    v-model="isShowSpec"
+                    v-model="showSpec"
                     :sku="sku"
                     :goods="goods"
                     :goods-id="goods.id"
                     :quota="quota"
                     :hide-stock="sku.hide_stock"
                     :initial-sku="initialSku"
+                    ref="goodsSku"
             >
                 <template #sku-actions="props">
                     <div class="van-sku-actions">
@@ -118,7 +119,7 @@
                                 type="warning"
                                 @click="onClickBuy"
                         >
-                            积分兑换
+                            确定
                         </van-button>
                     </div>
                 </template>
@@ -137,25 +138,25 @@
             return {
                 // 秒杀倒计时
                 time: 30 * 60 * 1000 * 100,
+                selectedSku: undefined,
                 // 是否秒杀
                 isSeckill: false,
                 goods: this.$route.query,
                 current: 0,
-                isShowService: false,
-                isShowAttr: false,
-                isShowSpec: false,
+                showService: false,
+                showAttr: false,
+                showSpec: false,
                 quota: 1, // 限购数
                 sku: {
                     tree: [
                         {
                             k: '颜色', // skuKeyName：规格类目名称
-                            v: [
-                                {
-                                    id: '1001', // skuValueId：规格值 id
-                                    name: '黑色', // skuValueName：规格值名称
-                                    imgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
-                                    previewImgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 用于预览显示的规格类目图片
-                                },
+                            v: [{
+                                id: '1001', // skuValueId：规格值 id
+                                name: '黑色', // skuValueName：规格值名称
+                                imgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
+                                previewImgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 用于预览显示的规格类目图片
+                            },
                                 {
                                     id: '1002',
                                     name: '白色',
@@ -232,8 +233,6 @@
                 }
             }
         },
-        mounted() {
-        },
         computed: {
             ...mapState(['shopCart', 'userInfo']),
             // 监听购物车商品数量变化渲染购物车图标
@@ -254,7 +253,6 @@
         },
         methods: {
             ...mapMutations(['ADD_TO_CART']),
-
             onClickLeft() {
                 this.$router.go(-1)
             },
@@ -262,26 +260,32 @@
                 this.current = index;
             },
             onClickService() {
-                this.isShowService = true
+                this.showService = true
             },
             onClickAttr() {
-                this.isShowAttr = true
+                this.showAttr = true
             },
             onClickSepc() {
-                this.isShowSpec = true
+                this.showSpec = true
             },
-            onClickBuy(k,skuData) {
-                console.log(skuData)
-                if(!this.initialSku.s2){
+            onClickBuyNow() {
+                this.showSpec = true
+            },
+            onClickBuy() {
+                let skuData = this.$refs.goodsSku.getSkuData()
+                if (!skuData.selectedSkuComb) {
                     Toast("请选择商品属性")
+                    return
                 }
-
+                this.showSpec = false
+                let g = skuData.selectedSkuComb
+                this.$router.push({name: 'order', params: {goods: {id: g.id, price: g.price,name:'测试商品',image:'https://img.yzcdn.cn/2.jpg'}}});
             },
             onClickAddToCart() {
                 this.ADD_TO_CART(this.goods)
             },
             onClickCart() {
-                if ( this.userToken) {
+                if (this.userToken) {
                     this.$router.push({name: 'cart'})
                 } else {
                     this.$router.push({name: 'login'})
@@ -294,7 +298,7 @@
 <style lang="less" scoped>
     .goods {
         background-color: #f5f5f5;
-        padding-bottom: 50px;
+        padding-bottom: 100px;
 
         &-swipe {
             margin-top: 2.7rem;

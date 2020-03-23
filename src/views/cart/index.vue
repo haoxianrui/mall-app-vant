@@ -116,10 +116,6 @@
             }
         },
         methods: {
-            test(){
-             alert(123)
-            },
-
             ...mapMutations(['ADD_GOODS', 'REDUCE_GOODS', 'SINGLE_SELECT_GOODS', 'ALL_SELECT_GOODS', 'DELETE_SELECT_GOODS']),
             // 购物车删除商品
             onClickDeleteCartGoods() {
