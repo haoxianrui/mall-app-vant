@@ -138,7 +138,7 @@
             },
             goodsList:{
                 get(){
-                    return []
+                    return this.goods
                 },
                 set(){
 

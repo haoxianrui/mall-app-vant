@@ -279,9 +279,10 @@
                 }
                 this.showSpec = false
                 let g = skuData.selectedSkuComb
-                this.$router.push({name: 'order', params: {goods: {id: g.id, price: g.price,name:'测试商品',image:'https://img.yzcdn.cn/2.jpg'}}});
+                this.$router.push({name: 'order', params: {goods: {id: g.id, price:' 2.00',name:'测试商品',image:'https://img.yzcdn.cn/2.jpg'}}});
             },
             onClickAddToCart() {
+                ///
                 this.ADD_TO_CART(this.goods)
             },
             onClickCart() {
