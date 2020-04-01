@@ -140,7 +140,7 @@
                 time: 30 * 60 * 1000 * 100,
                 selectedSku: undefined,
                 // 是否秒杀
-                isSeckill: false,
+                isSpike: false,
                 goods: this.$route.query,
                 current: 0,
                 showService: false,

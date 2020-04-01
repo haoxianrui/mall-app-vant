@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "better-scroll": "^1.15.2",
     "core-js": "^3.4.3",
     "lodash": "^4.17.15",
     "vant": "^2.5.4",
