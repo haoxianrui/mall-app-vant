@@ -1,11 +1,8 @@
 <!-- 秒杀商品 -->
 <template>
-    <div class="spikeGoodsWrapper"
-         ref="spikeGoodsWrapper"
-    >
-        <ul class="goods">
-            <li class="goods-item"
-                ref="goodsItem"
+    <div class="goods-wrapper">
+        <ul class="goods-content" ref="goodsContent">
+            <li class="goods-item" ref="goodsItem"
                 v-for="(item,index) in spikeGoodsList"
                 :key="index"
                 @click="handleOpenGoodsDetail(item)"
@@ -37,28 +34,30 @@
         },
         mounted() {
             this.$nextTick(() => {
-                let contentWidth = 0
-                let items = this.$refs.goodsItem
-                if (items) {
-                    console.log(items)
-                    items.forEach(item => {
-                        contentWidth += item.clientWidth
-                    })
-                    this.$refs.spikeGoodsWrapper.style.width = contentWidth + "px"
-                    if (!this.scroll) {
-                        this.scroll = new BScroll('.spikeGoodsWrapper', {
-                            probeType: 2,
-                            startX: 0,
-                            click: true,
-                            scrollX: true,
-                            scrollY: false,
-                            eventPassthrough: "vertical" //保留原生的纵向滚动
+                let that = this
+                setTimeout(function () {
+                    let contentWidth = 0
+                    let items = that.$refs.goodsItem
+                    if (items) {
+                        items.forEach(item => {
+                            contentWidth += item.clientWidth
                         })
-                    } else {
-                        this.scroll.refresh()
+                        that.$refs.goodsContent.style.width = contentWidth + "px"
+                        if (!that.scroll) {
+                            that.scroll = new BScroll('.goods-wrapper', {
+                                probeType: 2,
+                                startX: 0,
+                                click: true,
+                                scrollX: true,
+                                scrollY: false,
+                                eventPassthrough: "vertical" //保留原生的纵向滚动
+                            })
+                        } else {
+                            that.scroll.refresh()
+                        }
                     }
-                }
 
+                })
             })
         },
         methods: {
@@ -83,5 +82,92 @@
 </script>
 
 <style lang="less" scoped>
+    .goods-wrapper {
+        width: 100%;
+        overflow: hidden;
+        position: absolute;
+
+        .goods-content {
+            display: flex;
+            justify-content: flex-start;
+
+            .goods-item {
+                flex: 0 0 6rem;
+                align-items: center;
+                padding-right: 0.5rem;
+            }
+
+        }
+
+        @keyframes mymove {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(0.6);
+            }
+            75% {
+                transform: scale(0.4);
+            }
+            100% {
+                transform: scale(0.2);
+            }
+        }
+        @-moz-keyframes mymove {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(0.6);
+            }
+            75% {
+                transform: scale(0.4);
+            }
+            100% {
+                transform: scale(0.2);
+            }
+        }
+        @-webkit-keyframes mymove {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(0.6);
+            }
+            75% {
+                transform: scale(0.4);
+            }
+            100% {
+                transform: scale(0.2);
+            }
+        }
+        @-o-keyframes mymove {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(0.6);
+            }
+            75% {
+                transform: scale(0.4);
+            }
+            100% {
+                transform: scale(0.2);
+            }
+        }
+    }
+
 
 </style>
