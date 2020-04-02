@@ -7,11 +7,11 @@
                 :key="index"
                 @click="handleOpenGoodsDetail(item)"
             >
-                <img v-lazy="item.goodsPic"/>
-                <span class="goods-item-name">{{item.goodsName}}</span>
+                <img class="goods-item-img" v-lazy="item.goodsPic"/>
+               <!-- <div class="goods-item-name">{{item.goodsName}}</div>-->
                 <div class="goods-item-price">
-                    <p class="goods-item-price-spike">{{item.spikePrice}}</p>
-                    <p class="goods-item-price-original">{{item.goodsPrice}}</p>
+                    <p class="goods-item-price-spike">{{item.spikePrice|moneyFormat}}</p>
+                    <p class="goods-item-price-original">{{item.goodsPrice|moneyFormat}}</p>
                 </div>
             </li>
         </ul>
@@ -30,35 +30,38 @@
         watch: {
             spikeGoodsList: function (newValue, oldValue) {
                 this.spikeGoodsList = newValue
+
+                this.$nextTick(() => {
+                    let that = this
+                    setTimeout(function () {
+                        let contentWidth = 0
+
+                        let items = that.$refs.goodsItem
+                        if (items) {
+                            items.forEach(item => {
+                                contentWidth += item.clientWidth
+                            })
+
+                            that.$refs.goodsContent.style.width = contentWidth + "px"
+                            if (!that.scroll) {
+                                that.scroll = new BScroll('.goods-wrapper', {
+                                    probeType: 2,
+                                    startX: 0,
+                                    click: true,
+                                    scrollX: true,
+                                    scrollY: false,
+                                    eventPassthrough: "vertical" //保留原生的纵向滚动
+                                })
+                            } else {
+                                that.scroll.refresh()
+                            }
+                        }
+                    })
+                })
             }
         },
         mounted() {
-            this.$nextTick(() => {
-                let that = this
-                setTimeout(function () {
-                    let contentWidth = 0
-                    let items = that.$refs.goodsItem
-                    if (items) {
-                        items.forEach(item => {
-                            contentWidth += item.clientWidth
-                        })
-                        that.$refs.goodsContent.style.width = contentWidth + "px"
-                        if (!that.scroll) {
-                            that.scroll = new BScroll('.goods-wrapper', {
-                                probeType: 2,
-                                startX: 0,
-                                click: true,
-                                scrollX: true,
-                                scrollY: false,
-                                eventPassthrough: "vertical" //保留原生的纵向滚动
-                            })
-                        } else {
-                            that.scroll.refresh()
-                        }
-                    }
 
-                })
-            })
         },
         methods: {
             handleOpenGoodsDetail(goods) {
@@ -90,81 +93,29 @@
         .goods-content {
             display: flex;
             justify-content: flex-start;
-
             .goods-item {
-                flex: 0 0 6rem;
                 align-items: center;
-                padding-right: 0.5rem;
-            }
+                margin-left:10px;
+                &-img{
+                    width: 80px;
+                    height: 80px;
+                    margin: 0 auto;
+                }
+                &-name{
 
-        }
-
-        @keyframes mymove {
-            0% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(0.8);
-            }
-            50% {
-                transform: scale(0.6);
-            }
-            75% {
-                transform: scale(0.4);
-            }
-            100% {
-                transform: scale(0.2);
-            }
-        }
-        @-moz-keyframes mymove {
-            0% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(0.8);
-            }
-            50% {
-                transform: scale(0.6);
-            }
-            75% {
-                transform: scale(0.4);
-            }
-            100% {
-                transform: scale(0.2);
-            }
-        }
-        @-webkit-keyframes mymove {
-            0% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(0.8);
-            }
-            50% {
-                transform: scale(0.6);
-            }
-            75% {
-                transform: scale(0.4);
-            }
-            100% {
-                transform: scale(0.2);
-            }
-        }
-        @-o-keyframes mymove {
-            0% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(0.8);
-            }
-            50% {
-                transform: scale(0.6);
-            }
-            75% {
-                transform: scale(0.4);
-            }
-            100% {
-                transform: scale(0.2);
+                }
+                &-price{
+                    text-align: center;
+                    &-spike{
+                        font-size: 14px;
+                        color: #FB0017;
+                    }
+                    &-original{
+                        font-size: 12px;
+                        text-decoration:line-through;
+                        color: #999999;
+                    }
+                }
             }
         }
     }

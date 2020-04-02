@@ -133,4 +133,7 @@
         font-weight: 600;
     }
 
+    #dashboard{
+        padding-bottom: 50px;
+    }
 </style>

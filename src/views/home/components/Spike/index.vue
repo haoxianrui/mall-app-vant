@@ -1,18 +1,18 @@
 <!-- 秒杀专区 -->
 <template>
-    <div id="spike">
-        <div class="g-hd">
-            <span class="u-tt">有来秒杀</span>
-            <div class="m-countdown">
-                <span class="u-span-lt">
+    <div class="spike">
+        <div class="spike-header">
+            <span class="spike-header-title">有来秒杀</span>
+            <div class="spike-header-countdown">
+                <span class="spike-header-countdown-lt">
                     {{spikeInfo&&spikeInfo.spikePeriodName}}
                 </span>
-                <span class="u-span-rt">
+                <span class="spike-header-countdown-rt">
                      <van-count-down :time="time" format="HH:mm:ss"/>
                 </span>
             </div>
-            <div class="m-more" @click="handleMoreClick">
-                <span class="u-span">查看全部</span>
+            <div class="spike-header-more" @click="handleMoreClick">
+                <span class="spike-header-more-text">查看全部</span>
                 <van-icon name="play" size="14"/>
             </div>
         </div>
@@ -50,13 +50,12 @@
 </script>
 
 <style lang="less" scoped>
-    #spike {
+    .spike {
         background: #ffffff;
-
-        .g-hd {
-            padding: 10px 10px 0 10px;
-
-            .u-tt {
+        height: 150px;
+        &-header {
+            padding:0 10px;
+            &-title {
                 display: inline-block;
                 height: 30px;
                 line-height: 30px;
@@ -65,12 +64,12 @@
                 font-weight: bold;
             }
 
-            .m-countdown {
+            &-countdown {
                 margin-left: 10px;
                 display: inline-block;
                 margin-top: -2px;
 
-                .u-span-lt {
+                &-lt {
                     display: inline-block;
                     font-size: 12px;
                     border: 1px solid #FB0017;
@@ -84,7 +83,7 @@
                     background: #FB0017;
                 }
 
-                .u-span-rt {
+                &-rt {
                     .van-count-down {
                         font-size: 12px;
                     }
@@ -102,10 +101,10 @@
                 line-height: 30px;
             }
 
-            .m-more {
+            &-more {
                 float: right;
 
-                .u-span {
+                &-text {
                     display: inline-block;
                     height: 30px;
                     line-height: 30px;

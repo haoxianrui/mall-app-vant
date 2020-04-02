@@ -25,11 +25,18 @@ export function getGoodsCategoryList() {
 }
 
 
-// 首页秒杀商品
-
+// 秒杀商品
 export function getSpikeGoodsList() {
     return request({
         url:'/v1/home/getSpikeGoodsList',
+        method:'get'
+    })
+}
+
+// 人气推荐商品
+export  function getHotGoodsList() {
+    return request({
+        url:'/v1/home/getHotGoodsList',
         method:'get'
     })
 }

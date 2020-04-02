@@ -10,6 +10,7 @@
             <!-- 秒杀专区 -->
             <spike :spikeInfo="spikeInfo"/>
 
+            <hot :hotGoodsList="hotGoodsList"/>
             <!-- 回到顶部按钮 -->
             <v-top/>
         </div>
@@ -19,11 +20,12 @@
 </template>
 
 <script>
-    import {getAdList, getGoodsCategoryList,getSpikeGoodsList, getHomeData} from "@/api/home"
+    import {getAdList, getGoodsCategoryList, getSpikeGoodsList, getHotGoodsList, getHomeData} from "@/api/home"
     import loading from '@/components/loading/LoadingGif'
     import AdCarousel from './components/AdCarousel'
     import CategoryNav from './components/CategoryNav'
     import Spike from './components/Spike'
+    import Hot from './components/Hot'
 
     export default {
         created() {
@@ -33,15 +35,17 @@
             return {
                 isShowLoading: true,     // 是否加载动画
                 advertisementList: undefined,   // 广告轮播图
-                goodsCategoryList:undefined,   // 商品分类
-                spikeInfo:undefined        // 秒杀商品
+                goodsCategoryList: undefined,   // 商品分类
+                spikeInfo: undefined,        // 秒杀商品
+                hotGoodsList: undefined
             }
         },
         components: {
             loading,
             AdCarousel,
             CategoryNav,
-            Spike
+            Spike,
+            Hot
         },
         methods: {
             async _initData() {
@@ -59,6 +63,11 @@
                 // 秒杀商品
                 getSpikeGoodsList().then(response => {
                     this.spikeInfo = response.data
+                })
+
+                // 人气推荐商品
+                getHotGoodsList().then(response => {
+                    this.hotGoodsList=response.data
                 })
                 this.isShowLoading = false
             }
