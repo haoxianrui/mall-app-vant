@@ -51,6 +51,7 @@
 
 <style lang="less" scoped>
     .spike {
+        position: relative;
         background: #ffffff;
         height: 150px;
         &-header {

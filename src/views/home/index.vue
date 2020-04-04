@@ -22,10 +22,10 @@
 <script>
     import {getAdList, getGoodsCategoryList, getSpikeGoodsList, getHotGoodsList, getHomeData} from "@/api/home"
     import loading from '@/components/loading/LoadingGif'
-    import AdCarousel from './components/AdCarousel'
-    import CategoryNav from './components/CategoryNav'
-    import Spike from './components/Spike'
-    import Hot from './components/Hot'
+    import AdCarousel from './AdCarousel'
+    import CategoryNav from './CategoryNav'
+    import Spike from './Spike'
+    import Hot from './Hot'
 
     export default {
         created() {

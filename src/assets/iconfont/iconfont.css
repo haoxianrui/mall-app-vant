@@ -1,0 +1,76 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.ttf?t=1585988951085') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-guanyuwomen:before {
+  content: "\e603";
+}
+
+.icon-bangzhuzhongxin1:before {
+  content: "\e685";
+}
+
+.icon-shouhuodizhi:before {
+  content: "\e64b";
+}
+
+.icon-daipingjia:before {
+  content: "\e608";
+}
+
+.icon-yijianfankui:before {
+  content: "\e63c";
+}
+
+.icon-shouhuodizhi1:before {
+  content: "\e615";
+}
+
+.icon-shangpinshoucang:before {
+  content: "\e609";
+}
+
+.icon-daifahuo:before {
+  content: "\e604";
+}
+
+.icon-youhuiquan:before {
+  content: "\e60c";
+}
+
+.icon-daishouhuo:before {
+  content: "\e60d";
+}
+
+.icon-daifukuan:before {
+  content: "\e625";
+}
+
+.icon-zuji:before {
+  content: "\e601";
+}
+
+.icon-lianxikefu:before {
+  content: "\e627";
+}
+
+.icon-VIP:before {
+  content: "\e876";
+}
+
+.icon-wechat:before {
+  content: "\e600";
+}
+
+.icon-QQ:before {
+  content: "\e667";
+}
+

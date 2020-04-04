@@ -12,9 +12,9 @@
                 <van-tabbar-item v-for="(item,index) in tabbars"
                                  :id="item.name=='cart'?'shop-cart':''"
                                  :info="item.name=='cart' ? goodsNum : ''"
-                                 :icon ="item.icon"
+                                 :icon="item.icon"
                                  @click="handleTabClick(index,item.name)"
-                ></van-tabbar-item>
+                >{{item.title}}</van-tabbar-item>
             </van-tabbar>
         </div>
     </div>
@@ -74,7 +74,7 @@
                     {
                         name: "user",
                         title: '我的',
-                        icon:'manager'
+                        icon: 'manager'
                     }
 
                 ]
@@ -109,31 +109,37 @@
 
 <style lanuage="less" scoped>
 
-    @media only screen and (min-width: 768px) {
-        body{background: #f6f6f6;}
 
+
+    #dashboard {
+        width: 100%;
     }
 
-    .van-tabbar-item--active{
+    .van-tabbar-item--active {
         color: #F75B52 !important;
     }
-    .van-tabbar-item__icon{
+
+    .van-tabbar-item__icon {
         font-size: 20px;
     }
-    .van-tabbar-item:active{
+
+    .van-tabbar-item:active {
         background: #f6f6f6;
     }
-    .van-tabbar-item__icon:active,.van-tabbar-item__text:active{
+
+    .van-tabbar-item__icon:active, .van-tabbar-item__text:active {
         color: #F75B52;
     }
-    .van-tabbar--fixed{
+
+    .van-tabbar--fixed {
         z-index: 999;
     }
-    .van-tabbar-item .van-icon-search{
+
+    .van-tabbar-item .van-icon-search {
         font-weight: 600;
     }
 
-    #dashboard{
+    #dashboard {
         padding-bottom: 50px;
     }
 </style>

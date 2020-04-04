@@ -12,7 +12,7 @@
             <van-card
                     class="hot-goods-item"
                     v-for="(item,index) in hotGoodsList"
-                    :price="item.goodsPrice|moneyFormat"
+                    :price="item.goodsPrice"
                     :desc="item.goodsSubTitle"
                     :title="item.goodsName"
                     tag="hot"

@@ -2,6 +2,7 @@
 
 import Vue from 'vue'
 
+
 // Tabbar底部
 import {Tabbar, TabbarItem} from 'vant'
 Vue.use(Tabbar).use(TabbarItem)
@@ -125,3 +126,10 @@ Vue.use(Popup);
 // 优惠券
 import { CouponCell, CouponList } from 'vant';
 Vue.use(CouponCell).use(CouponList);
+
+// 商品搜索
+import { Search } from 'vant';
+Vue.use(Search);
+
+import { Sidebar, SidebarItem } from 'vant';
+Vue.use(Sidebar).use(SidebarItem);
