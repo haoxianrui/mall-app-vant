@@ -36,8 +36,7 @@
             hotGoodsList: function (newValue, oldValue) {
                 this.hotGoodsList = newValue
             }
-        },
-
+        }
     }
 </script>
 

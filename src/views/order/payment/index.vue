@@ -1,3 +1,4 @@
+<!-- 订单支付页面 -->
 <template>
     <div class="payment">
         <van-nav-bar

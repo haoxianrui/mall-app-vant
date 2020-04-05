@@ -6,64 +6,63 @@
                 left-arrow
                 @click-left="onClickLeft"
         />
-        <van-tabs v-model="activeName" @click="onClickOrder" sticky>
+        <van-tabs class="order-category" v-model="activeName" @click="onClickOrder" sticky>
             <van-tab title="全部" :name="0">
-                <OrderList :orderListData="orderListData"></OrderList>
+                <OrderList :orderList="orderList"></OrderList>
             </van-tab>
             <van-tab title="待付款" :name="1">
-                <OrderList :orderListData="orderListData"></OrderList>
+                <OrderList :orderList="orderList"></OrderList>
             </van-tab>
             <van-tab title="待发货" :name="2">
-                <OrderList :orderListData="orderListData"></OrderList>
+                <OrderList :orderList="orderList"></OrderList>
             </van-tab>
             <van-tab title="待收货" :name="3">
-                <OrderList :orderListData="orderListData"></OrderList>
+                <OrderList :orderList="orderList"></OrderList>
             </van-tab>
-            <van-tab title="已完成" :name="4">
-                <OrderList :orderListData="orderListData"></OrderList>
-            </van-tab>
-            <van-tab title="已取消" :name="5">
-                <OrderList :orderListData="orderListData"></OrderList>
+            <van-tab title="待评价" :name="4">
+                <OrderList :orderList="orderList"></OrderList>
             </van-tab>
         </van-tabs>
     </div>
 </template>
 <script>
-    import OrderList from '@/views/user/order/list'
-    import {order} from '@/api/user'
+    import OrderList from './components/OrderList'
+    import {getOrderList} from '@/api/order'
 
     export default {
         name: "index",
         data() {
             return {
+                //activeName: this.$route.params.active,
                 activeName: this.$route.params.active,
-                orderListData: []
+                orderList: []
             };
         },
         mounted() {
-            this._initData()
+            this.initData()
         },
         components: {
             OrderList
         },
         methods: {
-            _initData() {
-                this.getOrderData()
+            initData() {
+                this.getOrderList()
             },
             onClickLeft() {
                 this.$router.back();
             },
             onClickOrder() {
-                this.getOrderData()
+                this.getOrderList()
             },
-            getOrderData() {
-                this.orderListData = []
-                order().then(response => {
+            getOrderList() {
+                this.orderList = []
+                getOrderList().then(response => {
                     if (response.data && response.data.length > 0) {
-                        if (this.activeName === 0) { // 全部
-                            this.orderListData = response.data
+                        console.log(response.data)
+                        if (this.activeName === 0) {
+                            this.orderList = response.data
                         } else {
-                            this.orderListData = response.data.filter(item => item.status == this.activeName)
+                            this.orderList = response.data.filter(item => item.status == this.activeName)
                         }
                     }
                 })
@@ -73,6 +72,7 @@
 </script>
 
 <style lang="less" scoped>
+
     .order {
         position: fixed;
         top: 0;

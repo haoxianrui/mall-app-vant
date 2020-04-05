@@ -1,6 +1,7 @@
+<!-- 用户登录 -->
+
 <template>
     <div class="login">
-        <!-- 头部返回 -->
         <van-nav-bar
                 title="用户登录"
                 :fixed=true
@@ -90,7 +91,7 @@
 <script>
     import {Toast} from 'vant'
     import {mapActions} from 'vuex'
-    import {login} from '@/api/login'
+    import {login} from '@/api/user'
 
     export default {
         name: "login",

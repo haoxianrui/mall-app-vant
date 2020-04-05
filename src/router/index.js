@@ -41,9 +41,13 @@ const router = new Router({
             path: 'category',
             name: 'category',
             component: () => import("@/views/category"),
-            meta: {
-                keepAlive: true
-            }
+            children: [
+                {
+                    path: 'list',
+                    name: 'categoryList',
+                    component: () => import('@/views/category/list')
+                }
+            ]
         }, {
             path: 'cart',
             name: 'cart',
@@ -55,11 +59,26 @@ const router = new Router({
             path: 'user',
             name: 'user',
             component: () => import("@/views/user"),
-            children: [{
-                path: 'order',
-                name: 'userOrder',
-                component: () => import("@/views/user/order")
-            }]
+            children: [
+                {
+                    path: 'address',
+                    name: 'userAddress',
+                    component: () => import("@/views/user/address"),
+                    children: [{
+                        path: 'add',
+                        name: 'addAddress',
+                        component: () => import("@/views/user/address/add")
+                    }, {
+                        path: 'edit',
+                        name: 'editAddress',
+                        component: () => import("@/views/user/address/edit")
+                    }]
+                }, {
+                    path: 'order',
+                    name: 'userOrder',
+                    component: () => import('@/views/user/order')
+                }
+            ]
         }, {
             // 商品详情页
             path: 'goodsDetail',
@@ -72,30 +91,17 @@ const router = new Router({
             path: '/order',
             name: 'order',
             component: () => import("@/views/order"),
-            children: [{
-                path: 'address',
-                name: 'addressIndex',
-                component: () => import("@/views/order/address"),
-
-                children: [{
-                    path: 'add',
-                    name: 'addAddress',
-                    component: () => import("@/views/order/address/add")
-                }, {
-                    path: 'edit',
-                    name: 'editAddress',
-                    component: () => import("@/views/order/address/edit")
+            children: [
+                {
+                    path: 'payment',
+                    name: 'orderPayment',
+                    component: () => import("@/views/order/payment"),
+                    children: [{
+                        path: 'result',
+                        name: 'paymentResult',
+                        component: () => import("@/views/order/payment/result")
+                    }]
                 }]
-            }, {
-                path: 'payment',
-                name: 'orderPayment',
-                component: () => import("@/views/order/payment"),
-                children: [{
-                    path: 'result',
-                    name: 'paymentResult',
-                    component: () => import("@/views/order/payment/result")
-                }]
-            }]
         },
         {
             // 登录

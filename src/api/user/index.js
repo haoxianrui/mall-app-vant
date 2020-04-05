@@ -1,17 +1,30 @@
 import request from '@/utils/request'
 
-// 优惠券
-export function coupon() {
+// 用户登录
+export function login(data) {
     return request({
-        url:'/coupon',
+        url:'/v1/users/login',
+        method:'post',
+        data:data
+    })
+}
+
+// 用户优惠券
+export function getCouponList() {
+    return request({
+        url:'/v1/users/1/coupon',
         method:'get'
     })
 }
 
-// 订单
-export function order() {
+// 用户地址
+export function getAddressList() {
     return request({
-        url:'/order',
+        url:'/v1/users/1/address',
         method:'get'
     })
 }
+
+
+
+
