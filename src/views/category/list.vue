@@ -64,7 +64,7 @@
             },
             gotoGoodsDetail(goodsId) {
                 this.$router.push({
-                    name: 'goodsDetail', params: {
+                    path: '/goodsDetail', query: {
                         goodsId: goodsId
                     }
                 })

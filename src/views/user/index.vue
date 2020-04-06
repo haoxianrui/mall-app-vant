@@ -107,8 +107,8 @@
         &-info {
             height: 100px;
             padding: 15px;
-            background: #ff6259;
-            background: url(../../assets/images/user_head_bg.png) no-repeat 0 0;
+            background: url(../../assets/images/user_head_bg.png) no-repeat;
+            background-size:100%;
             &-name {
                 display: inline-block;
                 color: #FFFFFF;
