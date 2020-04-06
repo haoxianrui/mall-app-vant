@@ -79,12 +79,11 @@ const router = new Router({
                     component: () => import('@/views/user/order')
                 }
             ]
-        }, {
-            // 商品详情页
-            path: 'goodsDetail',
-            name: 'goodsDetail',
-            component: () => import("@/components/goodsDetail")
         }]
+    }, {
+        path: '/goodsDetail',
+        name: 'goodsDetail',
+        component: () => import('@/views/goods/detail')
     },
         {
             // 订单

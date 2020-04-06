@@ -6,5 +6,12 @@ export function getGoodsListByCategory(categoryId) {
         method: 'get',
         params: {categoryId: categoryId}
     })
+}
 
+export function getGoodsInfo(goodsId) {
+    return request({
+        url: '/v1/goods/getGoodsInfo',
+        method: 'get',
+        params: {goodsId: goodsId}
+    })
 }

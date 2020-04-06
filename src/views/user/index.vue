@@ -5,6 +5,7 @@
                     round
                     width="100"
                     height="100"
+                    lazy-load
                     src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1586000911539&di=0459b277d147f5056547ae754b86b858&imgtype=0&src=http%3A%2F%2Fimgq.duitang.com%2Fuploads%2Fitem%2F201503%2F22%2F20150322135429_aRMB4.jpeg"
             />
             <span class="user-info-name">郝先瑞</span>
@@ -107,7 +108,7 @@
             height: 100px;
             padding: 15px;
             background: #ff6259;
-
+            background: url(../../assets/images/user_head_bg.png) no-repeat 0 0;
             &-name {
                 display: inline-block;
                 color: #FFFFFF;

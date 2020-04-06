@@ -123,7 +123,6 @@
         }
 
         /*转场动画*/
-
         .router-slider-enter-active,
         .router-slider-leave-active {
             transition: all 0.3s;

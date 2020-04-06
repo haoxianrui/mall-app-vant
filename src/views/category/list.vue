@@ -1,5 +1,5 @@
 <template>
-    <div id="categoryList">
+    <div class="category-list">
         <van-nav-bar
                 :title="parentCategoryName"
                 :fixed=true
@@ -17,6 +17,7 @@
                         <van-grid :gutter="6" :column-num="2" :border="false">
                             <van-grid-item
                                     v-for="(goods,index) in goodsList"
+                                    @click="gotoGoodsDetail(goods.id)"
                             >
                                 <van-image class="category-content-goods-image" :src="goods.imageUrl"/>
                                 <div class="category-content-goods-title">{{goods.name}}</div>
@@ -61,12 +62,19 @@
             onClickLeft() {
                 this.$router.back();
             },
+            gotoGoodsDetail(goodsId) {
+                this.$router.push({
+                    name: 'goodsDetail', params: {
+                        goodsId: goodsId
+                    }
+                })
+            }
         }
     }
 </script>
 
 <style lang="less" scoped>
-    #categoryList {
+    .category-list {
         position: fixed;
         top: 0;
         left: 0;
@@ -94,6 +102,7 @@
 
             &-goods {
                 margin-top: 10px;
+
                 &-image {
                     width: 100%;
                     height: 120px;
@@ -109,6 +118,18 @@
                 }
 
             }
+        }
+
+        /*转场动画*/
+        .router-slider-enter-active,
+        .router-slider-leave-active {
+            transition: all 0.3s;
+        }
+
+        .router-slider-enter,
+        .router-slider-leave-active {
+            transform: translate3d(2rem, 0, 0);
+            opacity: 0;
         }
     }
 
