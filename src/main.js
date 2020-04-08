@@ -19,8 +19,7 @@ new Vue({
   render: h => h(App)
 })
 
-// 引入mock
-require('./mock');
+
 
 //  全局引入 过滤器
 import '@/utils/filter'

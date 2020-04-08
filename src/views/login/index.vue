@@ -141,24 +141,26 @@
                     });
                 }
             },
-            async onSubmitLogin(values) {
-                if(!this.login_user.username){
+            onSubmitLogin(values) {
+                if (!this.login_user.username) {
                     Toast({
                         message: '请填写用户名',
                         duration: 800
                     });
                     return
                 }
-                if(!this.login_user.password){
+                if (!this.login_user.password) {
                     Toast({
                         message: '请填写密码',
                         duration: 800
                     });
                     return
                 }
-                let res=  await login(values)
-                this.syncUserInfo(res.data)
-                this.$router.back()
+
+                login(values).then(response => {
+                    this.syncUserInfo(response.data)
+                    this.$router.back()
+                })
             },
             onSubmitRegister() {
 
@@ -169,9 +171,11 @@
 
 <style lang="less" scoped>
     .login {
+        height: 100%;
+        background: #FFFFFF;
+
         &-box {
-            margin-top: 3rem;
-            padding: 2rem 1rem;
+            padding: 4rem 1rem;
 
             .van-form {
                 padding: 1rem 0;

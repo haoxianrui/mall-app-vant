@@ -100,6 +100,8 @@
         </van-action-sheet>
 
         <!-- 规格上拉菜单 -->
+
+
         <van-action-sheet v-model="showSpec" title="标题">
             <van-sku
                     v-model="showSpec"

@@ -9,6 +9,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-fenxiang:before {
+  content: "\e7a5";
+}
 
 .icon-guanyuwomen:before {
   content: "\e603";

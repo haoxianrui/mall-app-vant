@@ -46,8 +46,6 @@ export default {
     },
     // 添加商品进购物车
     [ADD_TO_CART](state, goods) {
-        console.log(state.userInfo)
-        console.log(state.userInfo.token)
         if (state.userInfo.token) {
             setTimeout(() => {
                 this.commit('ADD_GOODS', {
