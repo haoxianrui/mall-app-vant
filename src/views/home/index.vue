@@ -20,11 +20,11 @@
 </template>
 
 <script>
-    import {getAdList, getGoodsCategoryList, getSpikeGoodsList, getHotGoodsList, getHomeData} from "@/api/home"
+    import {getAdList, getGoodsCategoryList, getSeckillInfo, getHotGoodsList, getHomeData} from "@/api/home"
     import loading from '@/components/loading/LoadingGif'
     import AdCarousel from './components/AdCarousel'
     import CategoryNav from './components/CategoryNav'
-    import Spike from './components/Spike'
+    import Spike from './components/Seckill'
     import Hot from './components/Hot'
 
     export default {
@@ -61,7 +61,7 @@
                 })
 
                 // 秒杀商品
-                getSpikeGoodsList().then(response => {
+                getSeckillInfo().then(response => {
                     this.spikeInfo = response.data
                 })
 

@@ -18,9 +18,9 @@ export function getGoodsCategoryList() {
 
 
 // 秒杀商品
-export function getSpikeGoodsList() {
+export function getSeckillInfo() {
     return request({
-        url:'/v1/home/getSpikeGoodsList',
+        url:'/v1/home/seckills',
         method:'get'
     })
 }

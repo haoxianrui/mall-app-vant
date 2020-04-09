@@ -3,14 +3,13 @@
     <div class="goods-wrapper">
         <ul class="goods-content" ref="goodsContent">
             <li class="goods-item" ref="goodsItem"
-                v-for="(goods,index) in spikeGoodsList"
+                v-for="(goods,index) in seckillGoodsList"
                 @click="gotoGoodsDetail(goods.id)"
             >
-                <img class="goods-item-img" v-lazy="goods.goodsPic"/>
-               <!-- <div class="goods-item-name">{{item.goodsName}}</div>-->
+                <img class="goods-item-img" v-lazy="goods.pic_url"/>
                 <div class="goods-item-price">
-                    <p class="goods-item-price-spike">{{goods.spikePrice|moneyFormat}}</p>
-                    <p class="goods-item-price-original">{{goods.goodsPrice|moneyFormat}}</p>
+                    <p class="goods-item-price-spike">{{goods.seckill_price|moneyFormat}}</p>
+                    <p class="goods-item-price-original">{{goods.price|moneyFormat}}</p>
                 </div>
             </li>
         </ul>
@@ -24,11 +23,11 @@
     export default {
         name: "goods",
         props: {
-            spikeGoodsList: Array
+            seckillGoodsList: Array
         },
         watch: {
-            spikeGoodsList: function (newValue, oldValue) {
-                this.spikeGoodsList = newValue
+            seckillGoodsList: function (newValue, oldValue) {
+                this.seckillGoodsList = newValue
 
                 this.$nextTick(() => {
                     let that = this
@@ -63,10 +62,10 @@
 
         },
         methods: {
-            gotoGoodsDetail(goods) {
+            gotoGoodsDetail(goodsId) {
                 this.$router.push({
                     name: 'goods', params: {
-                        goodsId: goods.id,
+                        goodsId: goodsId,
                         isSpike: true
                     }
                 })
