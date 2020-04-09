@@ -1,15 +1,15 @@
 <template>
     <div class="category-list">
         <van-nav-bar
-                :title="parentCategoryName"
+                :title="this.parentCategory.name"
                 :fixed=true
                 left-arrow
                 @click-left="onClickLeft"
         />
 
-        <van-tabs v-model="activeName" @click="onClickCategory" sticky>
+        <van-tabs v-model="categoryId" @click="onClickCategory" sticky>
             <van-tab :title="category.name" :name="category.id"
-                     v-for="(category,index) in categoryList">
+                     v-for="(category,index) in parentCategory.children">
                 <div class="category-content">
                     <div class="category-content-name">{{category.name}}</div>
                     <div class="category-content-description">{{category.description}}</div>
@@ -19,7 +19,7 @@
                                     v-for="(goods,index) in goodsList"
                                     @click="gotoGoodsDetail(goods.id)"
                             >
-                                <van-image class="category-content-goods-image" :src="goods.imageUrl"/>
+                                <van-image class="category-content-goods-image" :src="goods.image_url"/>
                                 <div class="category-content-goods-title">{{goods.name}}</div>
                                 <div class="category-content-goods-price">{{goods.price|moneyFormat}}</div>
                             </van-grid-item>
@@ -34,13 +34,14 @@
 <script>
     import {getGoodsListByCategory} from '@/api/goods'
 
+    import {getParentCategory} from '@/api/category'
+
     export default {
         name: "index",
         data() {
             return {
-                activeName: this.$route.params.currentCategoryId,
-                categoryList: this.$route.params.categoryList,
-                parentCategoryName: this.$route.params.parentCategoryName,
+                categoryId: this.$route.params.categoryId,
+                parentCategory:{},
                 goodsList: []
             }
         },
@@ -48,11 +49,17 @@
             this.initData()
         },
         methods: {
-            initData: function () {
-                this.getGoodsListByCategory(this.activeName)
+            initData: async function () {
+                await this.getParentCategory()
+                this.getGoodsListByCategory(this.categoryId)
             },
             onClickCategory: function (categoryId) {
                 this.getGoodsListByCategory(categoryId)
+            },
+            getParentCategory: function () {
+                getParentCategory(this.categoryId).then(response => {
+                    this.parentCategory = response.data
+                })
             },
             getGoodsListByCategory: function (categoryId) {
                 getGoodsListByCategory(categoryId).then(response => {
@@ -64,7 +71,7 @@
             },
             gotoGoodsDetail(goodsId) {
                 this.$router.push({
-                    path: '/goodsDetail', query: {
+                    name: 'goods', params: {
                         goodsId: goodsId
                     }
                 })
@@ -121,6 +128,7 @@
         }
 
         /*转场动画*/
+
         .router-slider-enter-active,
         .router-slider-leave-active {
             transition: all 0.3s;

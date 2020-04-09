@@ -34,7 +34,7 @@
         </van-row>
 
 
-        <van-row class="goods-detail-base" v-show="isSpike===false">
+        <van-row class="goods-detail-base" v-show="isSpike!==true">
             <van-col span="20">
                 <div class="goods-detail-base-name">{{goods.name}}</div>
                 <div class="goods-detail-base-title">{{goods.subTitle}}</div>
@@ -44,8 +44,8 @@
             </van-col>
         </van-row>
 
-        <van-row class="goods-detail-sales" v-show="isSpike===false">
-            <van-col span="18" class="goods-detail-sales-price">
+        <van-row class="goods-detail-sales" v-show="isSpike!==true">
+            <van-col span="16" class="goods-detail-sales-price">
                  <span class="goods-detail-sales-price-promotion">
                     {{goods.promotionPrice|moneyFormat}}
                 </span>
@@ -54,7 +54,7 @@
                 </span>
 
             </van-col>
-            <van-col span="6" class="goods-detail-sales-volume" align="right">
+            <van-col span="8" class="goods-detail-sales-volume" align="right">
                 销量: {{goods.salesVolume}} 件
             </van-col>
         </van-row>
@@ -114,9 +114,8 @@
         name: "index",
         data() {
             return {
-                // isSpike: this.$route.params.isSpike,
-                isSpike: false,
-                goodsId: this.$route.query.goodsId,
+                isSpike: this.$route.params.isSpike,
+                goodsId: this.$route.params.goodsId,
                 goods: {},
                 showSku: false,
                 quota: 1, // 限购件数
@@ -206,9 +205,6 @@
                 }
             }
         },
-        mounted() {
-            this.initData()
-        },
         computed: {
             ...mapState(['shopCart', 'userInfo']),
             // 监听购物车商品数量变化渲染购物车图标
@@ -226,6 +222,9 @@
                     return this.userInfo.token
                 }
             }
+        },
+        mounted() {
+            this.initData()
         },
         methods: {
             ...mapMutations(['ADD_TO_CART']),

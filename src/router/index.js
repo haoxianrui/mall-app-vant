@@ -81,8 +81,8 @@ const router = new Router({
             ]
         }]
     }, {
-        path: '/goodsDetail',
-        name: 'goodsDetail',
+        path: '/goods/:goodsId',
+        name: 'goods',
         component: () => import('@/views/goods/detail')
     },
         {

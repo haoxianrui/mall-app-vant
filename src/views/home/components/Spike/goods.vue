@@ -3,15 +3,14 @@
     <div class="goods-wrapper">
         <ul class="goods-content" ref="goodsContent">
             <li class="goods-item" ref="goodsItem"
-                v-for="(item,index) in spikeGoodsList"
-                :key="index"
-                @click="handleOpenGoodsDetail(item)"
+                v-for="(goods,index) in spikeGoodsList"
+                @click="gotoGoodsDetail(goods.id)"
             >
-                <img class="goods-item-img" v-lazy="item.goodsPic"/>
+                <img class="goods-item-img" v-lazy="goods.goodsPic"/>
                <!-- <div class="goods-item-name">{{item.goodsName}}</div>-->
                 <div class="goods-item-price">
-                    <p class="goods-item-price-spike">{{item.spikePrice|moneyFormat}}</p>
-                    <p class="goods-item-price-original">{{item.goodsPrice|moneyFormat}}</p>
+                    <p class="goods-item-price-spike">{{goods.spikePrice|moneyFormat}}</p>
+                    <p class="goods-item-price-original">{{goods.goodsPrice|moneyFormat}}</p>
                 </div>
             </li>
         </ul>
@@ -64,18 +63,10 @@
 
         },
         methods: {
-            handleOpenGoodsDetail(goods) {
+            gotoGoodsDetail(goods) {
                 this.$router.push({
-                    name: "goodsDetail",
-                    query: {
-                        id: goods.id,
-                        name: goods.name,
-                        desc: goods.desc,
-                        image: goods.image,
-                        price: goods.price,
-                        originPrice: goods.originPrice,
-                        stock: goods.stock,
-                        images: goods.images,
+                    name: 'goods', params: {
+                        goodsId: goods.id,
                         isSpike: true
                     }
                 })

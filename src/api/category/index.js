@@ -5,7 +5,6 @@ export function getCategoryList() {
         url: '/v1/categories/getCategoryList',
         method: 'get'
     })
-
 }
 
 export function getSubCategoryList(categoryId) {
@@ -14,6 +13,15 @@ export function getSubCategoryList(categoryId) {
         method: 'get',
         params: {categoryId: categoryId}
     })
+}
 
-
+/**
+ * 获取父分类信息
+ */
+export function  getParentCategory(categoryId) {
+    return request({
+        url: '/v1/categories/getParentCategory',
+        method: 'get',
+        params: {categoryId: categoryId}
+    })
 }

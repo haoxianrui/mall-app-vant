@@ -88,13 +88,15 @@
                 })
             },
             gotoCategoryList(categoryId) {
-                this.$router.push({
+            /*    this.$router.push({
                     name: 'categoryList', params: {
                         categoryList: this.subCategoryList,
                         currentCategoryId: categoryId,
                         parentCategoryName: this.currentCategoryName,
                     }
-                })
+                })*/
+
+                this.$router.push({path:'/dashboard/category/list',query:{categoryId:categoryId}})
             }
         }
     }
