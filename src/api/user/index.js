@@ -17,13 +17,9 @@ export function getCouponList() {
     })
 }
 
-// 用户地址
-export function getAddressList() {
-    return request({
-        url:'/v1/users/1/address',
-        method:'get'
-    })
-}
+
+
+
 
 
 

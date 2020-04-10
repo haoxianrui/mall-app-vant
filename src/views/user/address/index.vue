@@ -1,7 +1,7 @@
 <template>
     <div class="address">
         <van-nav-bar
-                title="添加地址"
+                title="地址列表"
                 :fixed=true
                 left-arrow
                 @click-left="onClickLeft"
@@ -9,12 +9,11 @@
         <!-- 地址列表 -->
         <van-address-list
                 v-model="chosenAddressId"
-                :list="shippingAddress"
+                :list="addressList"
                 default-tag-text="默认"
                 @add="onAdd"
                 @edit="onEdit"
                 add-button-text="新增地址"
-                @select="onBackAddress"
         />
 
         <!-- 路由出口 -->
@@ -26,18 +25,21 @@
 </template>
 
 <script>
+    import {getAddressList} from '@/api/user/address'
     import {mapState, mapMutations} from 'vuex'
 
     export default {
         data() {
             return {
                 chosenAddressId: this.$route.query.chosenAddressId,
+                addressList: []
             }
         },
         computed: {
             ...mapState(['shippingAddress']),
         },
         mounted() {
+            this.initData()
             this.INIT_USER_SHOPPING_ADDRESS()
         },
         methods: {
@@ -45,16 +47,16 @@
             onClickLeft() {
                 this.$router.back()
             },
+            initData() {
+                getAddressList().then(response => {
+                    this.addressList = response.data
+                })
+            },
             onAdd() {
-
-                this.$router.push('/order/address/add')
+                this.$router.push({path: '/dashboard/user/address/add'})
             },
             onEdit(item, index) {
-                this.$router.push({name: 'editAddress', params: {content: item}})
-            },
-            onBackAddress(item, index) {
-                this.$emit('getConcat', {name: item.name, tel: item.tel, address: item.address});
-                this.$router.back();
+                this.$router.push({name: 'editAddress', params:{addressId: item.id}})
             }
         }
     }
@@ -68,10 +70,11 @@
         right: 0;
         bottom: 0;
         background-color: #ffffff;
-        z-index: 200;
+        z-index: 2000;
         padding-top: 3rem;
 
         /*转场动画*/
+
         .router-slider-enter-active,
         .router-slider-leave-active {
             transition: all 0.3s;
