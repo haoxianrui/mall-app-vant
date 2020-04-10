@@ -84,7 +84,6 @@
                     padding: 0 3px;
                     color: #ffffff;
                     background: #FB0017;
-                    vertical-align: middle;
                 }
 
                 &-rt {
