@@ -3,7 +3,7 @@
     <div class="goods-wrapper">
         <ul class="goods-content" ref="goodsContent">
             <li class="goods-item" ref="goodsItem"
-                v-for="(goods,index) in seckillGoodsList"
+                v-for="(goods,index) in goodsList"
                 @click="gotoGoodsDetail(goods.id)"
             >
                 <img class="goods-item-img" v-lazy="goods.pic_url"/>
@@ -23,10 +23,10 @@
     export default {
         name: "goods",
         props: {
-            seckillGoodsList: Array
+            goodsList: Array
         },
         watch: {
-            seckillGoodsList: function (newValue, oldValue) {
+            goodsList: function (newValue, oldValue) {
                 this.seckillGoodsList = newValue
 
                 this.$nextTick(() => {
