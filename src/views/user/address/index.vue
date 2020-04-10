@@ -35,15 +35,10 @@
                 addressList: []
             }
         },
-        computed: {
-            ...mapState(['shippingAddress']),
-        },
         mounted() {
             this.initData()
-            this.INIT_USER_SHOPPING_ADDRESS()
         },
         methods: {
-            ...mapMutations(['INIT_USER_SHOPPING_ADDRESS']),
             onClickLeft() {
                 this.$router.back()
             },

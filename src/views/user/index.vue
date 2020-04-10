@@ -33,7 +33,7 @@
 
         <van-cell-group title="我的功能" class="user-func">
             <van-cell>
-                <van-col span="6">
+                <van-col span="6" @click="gotoCoupon">
                     <van-icon  class="iconfont" class-prefix="icon" name="youhuiquan" />
                     优惠券
                 </van-col>
@@ -98,6 +98,9 @@
             },
             gotoAddress:function(){
                 this.$router.push({path:'/dashboard/user/address'})
+            },
+            gotoCoupon:function(){
+                this.$router.push({path:'/dashboard/user/coupon'})
             }
         }
     };

@@ -74,6 +74,10 @@ const router = new Router({
                         component: () => import("@/views/user/address/edit")
                     }]
                 }, {
+                    path: 'coupon',
+                    name: 'userCoupon',
+                    component: () => import('@/views/user/coupon')
+                }, {
                     path: 'order',
                     name: 'userOrder',
                     component: () => import('@/views/user/order')
