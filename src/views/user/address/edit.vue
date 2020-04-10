@@ -1,5 +1,5 @@
 <template>
-    <div class="addAddress">
+    <div class="edit-address">
         <van-nav-bar
                 title="选择地址"
                 :fixed=true
@@ -18,44 +18,60 @@
                 :area-columns-placeholder="['请选择', '请选择', '请选择']"
                 @save="onSave"
                 @delete="onDelete"
-                @change-detail="onChangeDetail" />
+                @change-detail="onChangeDetail"/>
     </div>
 </template>
 
 <script>
     import areaList from '@/utils/area'
-    import {mapMutations} from 'vuex'
+    import {getAddressInfo,editAddress,deleteAddress} from '@/api/user/address'
+    import {Toast} from 'vant'
+
     export default {
         data() {
             return {
                 areaList: areaList,
-                addressInfo:{},
-                searchResult: []
+                addressInfo: {},
+                searchResult: [],
+                addressId: this.$route.params.addressId
             }
         },
         mounted() {
-            this.addressInfo = this.$route.params.content;
+            this.initData()
         },
         methods: {
-            ...mapMutations(['DELETE_USER_SHOPPING_ADDRESS', 'CHANGE_USER_SHOPPING_ADDRESS']),
 
+            initData() {
+                getAddressInfo(this.addressId).then(response => {
+                    this.addressInfo = response.data
+                    this.addressInfo.areaCode=response.data.area_code
+                    this.addressInfo.postalCode = response.data.postal_code
+                    this.addressInfo.addressDetail=response.data.address_detail
+                    this.addressInfo.isDefault=response.data.is_default
+                })
+            },
             onClickLeft() {
                 this.$router.back()
             },
             onSave(content) {
-                let id =content.id
-                content['id'] = id
-                content['address'] = content.province + content.city + content.county + content.addressDetail
-                this.CHANGE_USER_SHOPPING_ADDRESS({
-                   id, content
-                });
-                this.$router.back();
-
+                let id = content.id
+                editAddress(id, content).then(response => {
+                    if (response.code === 0) {
+                        Toast('修改成功')
+                        this.$router.back()
+                    }
+                })
             },
-            onDelete(content){
+            onDelete(content) {
                 let id = content.id;
-                this.DELETE_USER_SHOPPING_ADDRESS({ id });
-                this.$router.back();
+                deleteAddress(id).then(response =>{
+                    if (response.code===0){
+                        Toast('删除成功')
+                        this.$router.back()
+                    }
+                })
+
+
             },
             onChangeDetail(val) {
                 if (val) {
@@ -66,24 +82,20 @@
                 } else {
                     this.searchResult = [];
                 }
-            },
-            addressId() {
-                let lastUuid = 0;
-                return (new Date()).getTime() * 1000 + (lastUuid++) % 1000;
             }
         }
     }
 </script>
 
 <style lang="less" scoped>
-    .addAddress {
+    .edit-address {
         position: fixed;
         left: 0;
         top: 0;
         right: 0;
         bottom: 0;
         background-color: #f5f5f5;
-        z-index: 9999;
+        z-index: 2001;
         padding-top: 3rem;
     }
 </style>

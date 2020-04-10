@@ -45,7 +45,7 @@
                     <van-icon  class="iconfont" class-prefix="icon" name="zuji" />
                     浏览足迹
                 </van-col>
-                <van-col span="6">
+                <van-col span="6" @click="gotoAddress">
                     <van-icon  class="iconfont" class-prefix="icon" name="shouhuodizhi1" />
                     地址管理
                 </van-col>
@@ -95,6 +95,9 @@
             },
             handleClickLogout:function(){
                 Toast("退出成功")
+            },
+            gotoAddress:function(){
+                this.$router.push({path:'/dashboard/user/address'})
             }
         }
     };

@@ -1,5 +1,5 @@
 <template>
-    <div class="addAddress">
+    <div class="add-address">
         <van-nav-bar
                 title="选择地址"
                 :fixed=true
@@ -23,7 +23,8 @@
 
 <script>
     import areaList from '@/utils/area'
-    import {mapMutations} from 'vuex'
+    import {addAddress} from "@/api/user/address"
+    import {Toast} from 'vant'
     export default {
         data() {
             return {
@@ -32,18 +33,16 @@
             }
         },
         methods: {
-            ...mapMutations(['ADD_USER_SHOPPING_ADDRESS']),
             onClickLeft() {
                 this.$router.back()
             },
             onSave(content) {
-                let addressId = this.addressId().toString()
-                content['id'] = addressId
-                content['address'] = content.province + content.city + content.county + content.addressDetail
-                this.ADD_USER_SHOPPING_ADDRESS({
-                    content
-                });
-                this.$router.back();
+               addAddress(content).then(response => {
+                   if(response.code===0){
+                       Toast('添加成功')
+                       this.$router.back()
+                   }
+               })
 
             },
             onChangeDetail(val) {
@@ -55,24 +54,20 @@
                 } else {
                     this.searchResult = [];
                 }
-            },
-            addressId() {
-                let lastUuid = 0;
-                return (new Date()).getTime() * 1000 + (lastUuid++) % 1000;
             }
         }
     }
 </script>
 
 <style lang="less" scoped>
-    .addAddress {
+    .add-address {
         position: fixed;
         left: 0;
         top: 0;
         right: 0;
         bottom: 0;
         background-color: #f5f5f5;
-        z-index: 9999;
+        z-index: 2001;
         padding-top: 3rem;
     }
 </style>
