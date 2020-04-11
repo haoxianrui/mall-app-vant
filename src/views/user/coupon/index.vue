@@ -6,25 +6,25 @@
                 left-arrow
                 @click-left="onClickLeft"
         />
-        <van-tabs v-model="active">
+        <van-tabs v-model="active" sticky offset-top="46">
             <van-tab title="可用">
-                <van-cell-group class="coupon-item"  >
+                <van-cell-group class="coupon-item" v-for="(item,index) in couponList" >
                     <van-row style="padding-bottom:5px">
                         <van-col span="8"  class="coupon-item-left">
                             <van-row class="coupon-item-amount">
-                                1.5
-                                <span>元</span>
+                                {{item.value}}
+                                <span>{{item.unitDesc}}</span>
                             </van-row>
-                            <van-row class="coupon-item-condition">
-                                无使用门槛
+                            <van-row class="coupon-item-desc">
+                                {{item.valueDesc}}
                             </van-row>
                         </van-col>
                         <van-col span="12" class="coupon-item-middle">
                             <van-row class="coupon-item-name">
-                                优惠券名称
+                                {{item.name}}
                             </van-row>
                             <van-row class="coupon-item-valid">
-                                2017.01.01-2017.01.02
+                                {{item.startAt}}- {{item.endAt}}
                             </van-row>
                         </van-col>
                         <van-col span="4" class="coupon-item-right">
@@ -32,34 +32,34 @@
                         </van-col>
                     </van-row>
                     <van-row class="coupon-item-description">
-                        描述信息
+                        {{item.description}}
                     </van-row>
                 </van-cell-group>
             </van-tab>
             <van-tab title="不可用">
-                <van-cell-group class="coupon-item-disabled"  >
+                <van-cell-group class="coupon-item-disabled" v-for="(item,index) in disabledCouponList" >
                     <van-row style="padding-bottom:5px">
                         <van-col span="8"  class="coupon-item-disabled-left">
                             <van-row class="coupon-item-amount">
-                                1.5
-                                <span>元</span>
+                                {{item.value}}
+                                <span>{{item.unitDesc}}</span>
                             </van-row>
-                            <van-row class="coupon-item-condition">
-                                无使用门槛
+                            <van-row class="coupon-item-desc">
+                                {{item.valueDesc}}
                             </van-row>
                         </van-col>
                         <van-col span="16" class="coupon-item-middle">
                             <van-row class="coupon-item-name">
-                                优惠券名称
+                                {{item.name}}
                             </van-row>
                             <van-row class="coupon-item-valid">
-                                2017.01.01-2017.01.02
+                                {{item.startAt}}- {{item.endAt}}
                             </van-row>
                         </van-col>
 
                     </van-row>
                     <van-row class="coupon-item-description">
-                        優惠券不可用原因
+                        {{item.reason}}
                     </van-row>
                 </van-cell-group>
             </van-tab>
@@ -70,32 +70,28 @@
 </template>
 
 <script>
-    import {getAddressList} from '@/api/user/address'
-    const coupon = {
-        available: 1,
-        condition: '无使用门槛\n最多优惠12元',
-        reason: '',
-        value: 150,
-        name: '优惠券名称',
-        startAt: 1489104000,
-        endAt: 1514592000,
-        valueDesc: '1.5',
-        unitDesc: '元'
-    };
+    import {getCouponList} from '@/api/user/coupon'
+
 
     export default {
         data() {
             return {
                 active:0,
                 chosenCoupon: -1,
-                coupons: [coupon],
-                disabledCoupons: [coupon]
+                disabledCouponList: [],
+                couponList:[]
             }
         },
         mounted() {
             this.initData()
         },
         methods: {
+            initData() {
+                getCouponList().then(response => {
+                    this.couponList = response.data.couponList
+                    this.disabledCouponList = response.data.disabledCouponList
+                })
+            },
             onClickLeft() {
                 this.$router.back()
             },
@@ -104,9 +100,9 @@
                 this.chosenCoupon = index;
                 this.$router.push({path:'/'})
             },
-            onExchange(code) {
-                this.coupons.push(coupon);
-            }
+            // onExchange(code) {
+            //     this.couponList.push(coupon);
+            // }
         }
     }
 </script>
@@ -118,9 +114,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #f5f5f5;
+        background-color: #ffffff;
         z-index: 2000;
-        padding-top: 3rem;
+        padding-top: 46px;
+        overflow-y: auto;
         &-item{
             margin: 10px 10px 0 10px;
             border-radius:10px;
@@ -146,7 +143,7 @@
                     font-size: 40%;
                 }
             }
-            &-condition{
+            &-desc{
                 font-size: 12px;
                 line-height: 16px;
                 white-space: pre-wrap;
