@@ -114,7 +114,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ffffff;
+        background-color: #f5f5f5;
         z-index: 2000;
         padding-top: 46px;
         overflow-y: auto;

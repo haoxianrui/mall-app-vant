@@ -15,3 +15,10 @@ export function getGoodsInfo(goodsId) {
         params: {goodsId: goodsId}
     })
 }
+
+export function getGoodsSku(goodsId) {
+    return request({
+        url: '/v1/goods/sku',
+        method: 'get'
+    })
+}

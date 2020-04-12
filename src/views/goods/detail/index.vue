@@ -106,7 +106,7 @@
 </template>
 
 <script>
-    import {getGoodsInfo} from '@/api/goods'
+    import {getGoodsInfo,getGoodsSku} from '@/api/goods'
     import {mapMutations, mapState} from "vuex";
     import {Toast} from "vant";
 
@@ -230,6 +230,7 @@
             ...mapMutations(['ADD_TO_CART']),
             initData() {
                 this.getGoodsInfo(this.goodsId)
+                this.getGoodsSku()
             },
             onClickLeft() {
                 this.$router.go(-1)
@@ -237,6 +238,12 @@
             getGoodsInfo() {
                 getGoodsInfo(this.goodsId).then(response => {
                     this.goods = response.data
+                })
+            },
+            getGoodsSku() {
+                getGoodsSku().then(response => {
+                    this.sku = response.data
+                    console.log(this.sku)
                 })
             },
             onShowSkuClicked() {
