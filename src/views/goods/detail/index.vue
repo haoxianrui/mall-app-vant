@@ -119,8 +119,9 @@
 
 <script>
     import {getGoodsInfo, getGoodsSku} from '@/api/goods'
-    import {mapMutations, mapState} from "vuex";
-    import {Toast} from "vant";
+    import {mapMutations, mapState} from "vuex"
+    import {Toast} from "vant"
+    import axios from 'axios'
 
     export default {
         name: "index",
@@ -132,82 +133,41 @@
                 goods: {},
                 showSku: false,
                 quota: 1, // 限购件数
-                sku: {
+                sku: {  // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
+                    // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
                     tree: [
                         {
                             k: '颜色', // skuKeyName：规格类目名称
-                            v: [{
-                                id: '1001', // skuValueId：规格值 id
-                                name: '黑色', // skuValueName：规格值名称
-                                imgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
-                                previewImgUrl: 'https://img.yzcdn.cn/vant/apple-1.jpg', // 用于预览显示的规格类目图片
-                            },
+                            v: [
                                 {
-                                    id: '1002',
-                                    name: '白色',
-                                    imgUrl: 'https://img.yzcdn.cn/vant/apple-5.jpg',
-                                    previewImgUrl: 'https://img.yzcdn.cn/vant/apple-5.jpg',
+                                    id: '30349', // skuValueId：规格值 id
+                                    name: '红色', // skuValueName：规格值名称
+                                    imgUrl: 'https://img.yzcdn.cn/1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
+                                    previewImgUrl: 'https://img.yzcdn.cn/1p.jpg', // 用于预览显示的规格类目图片
+                                },
+                                {
+                                    id: '1215',
+                                    name: '蓝色',
+                                    imgUrl: 'https://img.yzcdn.cn/2.jpg',
+                                    previewImgUrl: 'https://img.yzcdn.cn/2p.jpg',
                                 }
                             ],
                             k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-                        },
-                        {
-                            k: '版本', // skuKeyName：规格类目名称
-                            v: [
-                                {
-                                    id: '2001', // skuValueId：规格值 id
-                                    name: '64G', // skuValueName：规格值名称
-                                },
-                                {
-                                    id: '2002',
-                                    name: '128G',
-                                }
-                            ],
-                            k_s: 's2' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
                         }
                     ],
                     // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
                     list: [
                         {
-                            id: 3001, // skuId，下单时后端需要
-                            price: 599900, // 价格（单位分）
-                            s1: '1001', // 规格类目 k_s 为 s1 的对应规格值 id
-                            s2: '2001', // 规格类目 k_s 为 s2 的对应规格值 id
+                            id: '2259', // skuId，下单时后端需要
+                            price: 100, // 价格（单位分）
+                            s1: '1215', // 规格类目 k_s 为 s1 的对应规格值 id
+                            s2: '1193', // 规格类目 k_s 为 s2 的对应规格值 id
                             s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-                            stock_num: 111 // 当前 sku 组合对应的库存
-                        },
-                        {
-                            id: 3002, // skuId，下单时后端需要
-                            price: 699900, // 价格（单位分）
-                            s1: '1001', // 规格类目 k_s 为 s1 的对应规格值 id
-                            s2: '2002', // 规格类目 k_s 为 s2 的对应规格值 id
-                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-                            stock_num: 112 // 当前 sku 组合对应的库存
-                        },
-                        {
-                            id: 3003, // skuId，下单时后端需要
-                            price: 599900, // 价格（单位分）
-                            s1: '1002', // 规格类目 k_s 为 s1 的对应规格值 id
-                            s2: '2001', // 规格类目 k_s 为 s2 的对应规格值 id
-                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-                            stock_num: 113 // 当前 sku 组合对应的库存
-                        },
-                        {
-                            id: 3004, // skuId，下单时后端需要
-                            price: 699900, // 价格（单位分）
-                            s1: '1002', // 规格类目 k_s 为 s1 的对应规格值 id
-                            s2: '2002', // 规格类目 k_s 为 s2 的对应规格值 id
-                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-                            stock_num: 114 // 当前 sku 组合对应的库存
+                            stock_num: 110 // 当前 sku 组合对应的库存
                         }
-
-                    ],
-                    price: '9999', // 默认价格（单位元）
-                    stock_num: 100, // 商品总库存
-                    collection_id: 3001, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
-                    none_sku: false, // 是否无规格商品
-                    hide_stock: false // 是否隐藏剩余库存
+                    ]
                 },
+                    // },
                 initialSku: {
                     // 键：skuKeyStr（sku 组合列表中当前类目对应的 key 值）
                     // 值：skuValueId（规格值 id）
@@ -243,7 +203,16 @@
             ...mapMutations(['ADD_TO_CART']),
             initData() {
                 this.getGoodsInfo(this.goodsId)
-                this.getGoodsSku()
+                let that=this
+                axios.get("http://localhost:9999/pms/api.app/v1/spus/1250428037998395393").then(function (response) {
+
+                    that.sku= response.data.data.sku
+                    console.log(that.sku)
+
+                }).catch(function (error) {
+                })
+
+                //this.getGoodsSku()
             },
             onClickLeft() {
                 this.$router.go(-1)
