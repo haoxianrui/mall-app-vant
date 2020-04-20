@@ -95,6 +95,7 @@
     import {mapGetters} from 'vuex'
     import {coupon} from '@/api/user'
     import {Toast} from 'vant'
+    import PubSub from 'pubsub-js'
 
     export default {
         data() {
@@ -110,7 +111,8 @@
                 chosenCoupon: -1,
                 disabledCoupons: [],
                 showCoupon: false, // 是否显示优惠券
-                freight: 800 // 运费
+                freight: 800, // 运费
+                goodsList:[]
             }
         },
         created() {
@@ -121,7 +123,20 @@
             })
         },
         mounted() {
-            this._initData()
+            this.initData()
+            PubSub.subscribe("order_choose_address", (msg, data) => {
+                if (msg == "order_choose_address") {
+                   console.log("监听到选中地址:",data)
+                    if (data) {
+                        this.concat.name = data.name
+                        this.concat.tel = data.tel
+                        this.concat.address = data.address
+                        this.concat.type = 'edit'
+                    }
+
+                }
+            })
+
         },
         computed: {
             ...mapGetters({
@@ -137,28 +152,26 @@
                 }
                 return finalPrice
             },
-            goodsList:{
-                get(){
-                    return this.goods
-                },
-                set(){
-
-                }
-            }
         },
         methods: {
-            _initData(){
-                this.goodsList=[]
-                let g = this.$route.params.goods
-                this.goodsList.push(g)
-                console.log(this.goodsList)
+            initData(){
+                let type= this.$route.params.type
+                if(type === 1){
+                    console.log("==== 立即购买进入 ====")
+                    this.goodsList=[]
+                    let sku_ids= this.$route.params.sku_ids
+                    this.goodsList.push({})
+                }else{
+                    console.log("====  购物车进入 ==== ")
+                    this.goodsList=this.goods
+                }
             },
             onClickLeft() {
                 this.$router.back();
             },
             // 选择地址
             chooseConcat() {
-                this.$router.push({path: '/order/address'});
+                this.$router.push({path: '/dashboard/user/address',query:{type:1}});
             },
             // 获取地址
             getConcat(data) {
@@ -186,7 +199,8 @@
                     // 提交订单逻辑 todo
                     this.$router.push({path: '/order/payment', query: {paymentAmount: this.actualPrice}})
                 }
-            }
+            },
+
         }
     }
 </script>

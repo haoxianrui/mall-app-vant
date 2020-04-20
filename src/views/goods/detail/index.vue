@@ -261,11 +261,8 @@
                     Toast("请选择规格")
                     return
                 }
-
                 this.showSku = false
-                let g = skuData.selectedSkuComb
-                console.log(g)
-                this.$router.push({name: 'order', params: {goods: {id: g.id, price:' 2.00',name:'测试商品',image:'https://img.yzcdn.cn/2.jpg'}}});
+                this.$router.push({name: 'order', params: { type : 1 , sku_ids: sku.selectedSku}});
             },
             onAddCartClicked() {
                 let goods = {

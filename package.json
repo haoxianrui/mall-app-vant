@@ -13,6 +13,7 @@
     "better-scroll": "^1.15.2",
     "core-js": "^3.4.3",
     "lodash": "^4.17.15",
+    "pubsub-js": "^1.8.0",
     "vant": "^2.5.4",
     "vue": "^2.6.10",
     "vue-router": "^3.0.5",

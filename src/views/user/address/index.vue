@@ -13,6 +13,7 @@
                 default-tag-text="默认"
                 @add="onAdd"
                 @edit="onEdit"
+                @select="onSelect"
                 add-button-text="新增地址"
         />
 
@@ -26,12 +27,14 @@
 
 <script>
     import {getAddressList} from '@/api/user/address'
-    import {mapState, mapMutations} from 'vuex'
+    import PubSub from 'pubsub-js'
+
 
     export default {
         data() {
             return {
                 chosenAddressId: this.$route.query.chosenAddressId,
+                type:this.$route.query.type,
                 addressList: []
             }
         },
@@ -52,6 +55,18 @@
             },
             onEdit(item, index) {
                 this.$router.push({name: 'editAddress', params:{addressId: item.id}})
+            },
+            onSelect(item,index){
+                if(this.type===1){
+                    let that=this
+                    setTimeout(function () {
+                        PubSub.publish("order_choose_address", item);
+                        that.$router.back()
+                    },100)
+                }else{
+
+                }
+
             }
         }
     }
