@@ -16,25 +16,7 @@
             </van-swipe-item>
         </van-swipe>
 
-        <!-- 秒杀提示 -->
-        <van-row class="goods-detail-spike" v-show="isSpike===true">
-            <van-col span="18" class="goods-detail-spike-price">
-                <van-row>
-                    <van-col span="8">
-                        {{goods.spikePrice|moneyFormat}}
-                    </van-col>
-                    <van-col span="16">
-                        {{goods.price|moneyFormat}}
-                    </van-col>
-                </van-row>
-            </van-col>
-            <van-col span="6" class="goods-detail-spike-time" align="right">
-                29:59:59
-            </van-col>
-        </van-row>
-
-
-        <van-row class="goods-detail-base" v-show="isSpike!==true">
+        <van-row class="goods-detail-base">
             <van-col span="20">
                 <div class="goods-detail-base-name">{{goods.name}}</div>
                 <div class="goods-detail-base-title">{{goods.subTitle}}</div>
@@ -44,7 +26,37 @@
             </van-col>
         </van-row>
 
-        <van-row class="goods-detail-sales" v-show="isSpike!==true">
+        <!-- 秒杀提示 -->
+        <van-row class="goods-detail-seckill" v-show="is_seckill===true">
+            <van-col span="16" class="goods-detail-seckill-price">
+                <van-row>
+                    <van-col span="8" class="seckill-price">
+                        {{goods.spikePrice|moneyFormat}}
+                    </van-col>
+                    <van-col span="16" class="price">
+                        <p> {{goods.price|moneyFormat}}</p>
+                        <div class="tag">
+                            <div class="icon"><van-icon name="clock-o"/></div>
+                            <div class="text">有来秒杀</div>
+                        </div>
+                    </van-col>
+                </van-row>
+            </van-col>
+            <van-col span="8" class="goods-detail-seckill-time" align="right">
+                <p class="tip">距秒杀结束还剩</p>
+                <van-count-down :time="time">
+                    <template v-slot="timeData">
+                        <span class="item">{{ timeData.hours }}</span>
+                        <span class="split">:</span>
+                        <span class="item">{{ timeData.minutes }}</span>
+                        <span class="split">:</span>
+                        <span class="item">{{ timeData.seconds }}</span>
+                    </template>
+                </van-count-down>
+            </van-col>
+        </van-row>
+
+        <van-row class="goods-detail-sales" v-show="is_seckill!==true">
             <van-col span="16" class="goods-detail-sales-price">
                  <span class="goods-detail-sales-price-promotion">
                     {{goods.promotionPrice|moneyFormat}}
@@ -106,7 +118,7 @@
 </template>
 
 <script>
-    import {getGoodsInfo,getGoodsSku} from '@/api/goods'
+    import {getGoodsInfo, getGoodsSku} from '@/api/goods'
     import {mapMutations, mapState} from "vuex";
     import {Toast} from "vant";
 
@@ -114,7 +126,8 @@
         name: "index",
         data() {
             return {
-                isSpike: this.$route.params.isSpike,
+                time: 30 * 60 * 60 * 1000,
+                is_seckill: this.$route.params.is_seckill,
                 goodsId: this.$route.params.goodsId,
                 goods: {},
                 showSku: false,
@@ -250,19 +263,18 @@
                 this.showSku = true
             },
             onBuyClicked() {
-                let sku=  this.$refs.sku
-                if(!sku){
+                let sku = this.$refs.sku
+                if (!sku) {
                     Toast("请选择规格")
                     return
                 }
-
                 const skuData = sku.getSkuData()
                 if (!skuData.selectedSkuComb) {
                     Toast("请选择规格")
                     return
                 }
                 this.showSku = false
-                this.$router.push({name: 'order', params: { type : 1 , sku_ids: sku.selectedSku}});
+                this.$router.push({name: 'order', params: {type: 1, sku_ids: sku.selectedSku}});
             },
             onAddCartClicked() {
                 let goods = {
@@ -280,29 +292,87 @@
 <style lang="less" scoped>
     .goods-detail {
         &-swipe {
-
+            height: 280px;
         }
 
-        &-spike {
+        &-seckill {
+            background: #ffffff;
             &-price {
-
+                background: #F75B52;
+                color: #ffffff;
+                .seckill-price {
+                    font-size: 20px;
+                    font-weight: 500;
+                    padding-left: 20px;
+                    height: 50px;
+                    line-height:50px;
+                }
+                .price {
+                    font-size: 14px;
+                    text-decoration: line-through;
+                    margin:10px 0 0 10px;
+                    width: 100px;
+                    .tag {
+                        background: #ffffff;
+                        font-size: 12px;
+                        display: inline-block;
+                        border: 1px solid #ffffff;
+                        border-bottom: none;
+                        height: 18px;
+                        text-align: center;
+                        .icon {
+                            margin-top: 2px;
+                            color: #F75B52;
+                            background: #ffffff;
+                            width: 20px;
+                            float: left;
+                            vertical-align: middle;
+                        }
+                        .text {
+                            float: left;
+                            color: #ffffff;
+                            background: #F75B52;
+                            width: 55px;
+                        }
+                    }
+                }
             }
 
             &-time {
-
+                padding:5px 10px 0 0;
+                .tip{
+                    font-size: 12px;
+                    color: #666666;
+                }
+                .item {
+                    display: inline-block;
+                    width: 20px;
+                    margin-right: 2px;
+                    color: #fff;
+                    font-size: 12px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    color: #F75B52;
+                    border: 1px solid #f3f3f3;
+                }
+                .split{
+                    color: #F75B52;
+                    margin-right: 2px;
+                }
             }
         }
-
-        &-sales{
+        &-sales {
             background: #FFFFFF;
             padding: 16px;
+
             &-price {
-                &-promotion{
+                &-promotion {
                     font-size: 18px;
                     color: #e25450;
                 }
-                &-origin{
-                    maigin-left:5px;
+
+                &-origin {
+                    maigin-left: 5px;
                     text-decoration: line-through;
                     color: #999999;
                 }

@@ -65,8 +65,8 @@
             gotoGoodsDetail(goodsId) {
                 this.$router.push({
                     name: 'goods', params: {
-                        goodsId: goodsId,
-                        isSpike: true
+                        goodsId : goodsId,
+                        is_seckill : true
                     }
                 })
             }

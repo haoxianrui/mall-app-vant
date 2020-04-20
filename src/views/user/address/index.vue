@@ -58,11 +58,9 @@
             },
             onSelect(item,index){
                 if(this.type===1){
-                    let that=this
-                    setTimeout(function () {
-                        PubSub.publish("order_choose_address", item);
-                        that.$router.back()
-                    },100)
+                    this.chosenAddressId=item.id
+                    PubSub.publish("order_choose_address", item)
+                    this.$router.back()
                 }else{
 
                 }

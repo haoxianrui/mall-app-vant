@@ -124,16 +124,15 @@
         },
         mounted() {
             this.initData()
+            let that=this
             PubSub.subscribe("order_choose_address", (msg, data) => {
                 if (msg == "order_choose_address") {
-                   console.log("监听到选中地址:",data)
                     if (data) {
-                        this.concat.name = data.name
-                        this.concat.tel = data.tel
-                        this.concat.address = data.address
-                        this.concat.type = 'edit'
+                        that.concat.name = data.name
+                        that.concat.tel = data.tel
+                        that.concat.address = data.address
+                        that.concat.type = 'edit'
                     }
-
                 }
             })
 
