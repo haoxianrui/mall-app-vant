@@ -301,6 +301,7 @@
                             color: #ffffff;
                             background: #F75B52;
                             width: 55px;
+                            padding-top:3px ;
                         }
                     }
                 }
