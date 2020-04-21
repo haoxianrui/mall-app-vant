@@ -204,15 +204,15 @@
             initData() {
                 this.getGoodsInfo(this.goodsId)
                 let that=this
-                axios.get("http://localhost:9999/pms/api.app/v1/spus/1250428037998395393").then(function (response) {
+                /*axios.get("http://localhost:9999/pms/api.app/v1/spus/1250428037998395393").then(function (response) {
 
                     that.sku= response.data.data.sku
                     console.log(that.sku)
 
                 }).catch(function (error) {
-                })
+                })*/
 
-                //this.getGoodsSku()
+                this.getGoodsSku()
             },
             onClickLeft() {
                 this.$router.go(-1)
@@ -282,18 +282,17 @@
                     margin:10px 0 0 10px;
                     width: 100px;
                     .tag {
-                        background: #ffffff;
                         font-size: 12px;
                         display: inline-block;
                         border: 1px solid #ffffff;
-                        border-bottom: none;
-                        height: 18px;
                         text-align: center;
                         .icon {
-                            margin-top: 2px;
+                            display: inline-block;
                             color: #F75B52;
                             background: #ffffff;
+                            padding-top:3px ;
                             width: 20px;
+                            height: 16px;
                             float: left;
                             vertical-align: middle;
                         }
