@@ -1,15 +1,18 @@
 <template>
-    <div class="category-list">
+    <div class="category-list-container">
         <van-nav-bar
-                :title="this.parentCategory.name"
+                :title="parentCategory.name"
                 :fixed=true
                 left-arrow
                 @click-left="onClickLeft"
         />
 
-        <van-tabs v-model="categoryId" @click="onClickCategory" sticky>
-            <van-tab :title="category.name" :name="category.id"
-                     v-for="(category,index) in parentCategory.children">
+        <van-tabs v-model="categoryId" @click="onCategoryClick" sticky>
+            <van-tab
+                    v-for="(category,index) in categoryList"
+                    :name="category.id"
+                    :title="category.name"
+            >
                 <div class="category-content">
                     <div class="category-content-name">{{category.name}}</div>
                     <div class="category-content-description">{{category.description}}</div>
@@ -19,7 +22,7 @@
                                     v-for="(goods,index) in goodsList"
                                     @click="gotoGoodsDetail(goods.id)"
                             >
-                                <van-image class="category-content-goods-image" :src="goods.image_url"/>
+                                <van-image class="category-content-goods-image" :src="goods.pic_url"/>
                                 <div class="category-content-goods-title">{{goods.name}}</div>
                                 <div class="category-content-goods-price">{{goods.price|moneyFormat}}</div>
                             </van-grid-item>
@@ -32,16 +35,19 @@
 </template>
 
 <script>
-    import {getGoodsListByCategory} from '@/api/goods'
 
-    import {getParentCategory} from '@/api/category'
+    import {categoryList} from '@/api/category'
+    import {goodsList} from '@/api/goods'
 
     export default {
-        name: "index",
         data() {
             return {
-                categoryId: this.$route.params.categoryId,
-                parentCategory:{},
+                parentCategory: {
+                    id: this.$route.query.categoryId,
+                    name: this.$route.query.categoryName
+                },
+                categoryList: [],
+                categoryId: undefined,
                 goodsList: []
             }
         },
@@ -49,29 +55,44 @@
             this.initData()
         },
         methods: {
-            initData: async function () {
-                await this.getParentCategory()
-                this.getGoodsListByCategory(this.categoryId)
-            },
-            onClickCategory: function (categoryId) {
-                this.getGoodsListByCategory(categoryId)
-            },
-            getParentCategory: function () {
-                getParentCategory(this.categoryId).then(response => {
-                    this.parentCategory = response.data
-                })
-            },
-            getGoodsListByCategory: function (categoryId) {
-                getGoodsListByCategory(categoryId).then(response => {
-                    this.goodsList = response.data
+            initData: function () {
+                let params = {
+                    parent_id: this.parentCategory.id
+                }
+
+                // tab分类列表数据加载
+                categoryList(params).then(response => {
+                    this.categoryList = []
+                    if (response.data && response.data.length > 0) {
+                        this.categoryList = response.data
+                        this.categoryId = response.data[0].id
+                        this.loadGoodsListByCategoryId()
+                    }
                 })
             },
             onClickLeft() {
                 this.$router.back();
             },
+            onCategoryClick: function (categoryId) {
+                this.categoryId = categoryId
+                this.loadGoodsListByCategoryId()
+            },
+            loadGoodsListByCategoryId() {
+                let params = {
+                    category_id: this.categoryId
+                }
+                // 选中的分类下的商品列表数据加载
+                goodsList(params).then(response => {
+                    this.goodsList = []
+                    if (response.data && response.data.length > 0) {
+                        this.goodsList = response.data
+                    }
+                })
+            },
             gotoGoodsDetail(goodsId) {
                 this.$router.push({
-                    name: 'goods', params: {
+                    name: 'goods',
+                    params: {
                         goodsId: goodsId
                     }
                 })
@@ -81,7 +102,7 @@
 </script>
 
 <style lang="less" scoped>
-    .category-list {
+    .category-list-container {
         position: fixed;
         top: 0;
         left: 0;
@@ -125,19 +146,6 @@
                 }
 
             }
-        }
-
-        /*转场动画*/
-
-        .router-slider-enter-active,
-        .router-slider-leave-active {
-            transition: all 0.3s;
-        }
-
-        .router-slider-enter,
-        .router-slider-leave-active {
-            transform: translate3d(2rem, 0, 0);
-            opacity: 0;
         }
     }
 

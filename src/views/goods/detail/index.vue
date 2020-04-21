@@ -1,5 +1,5 @@
 <template>
-    <div class="goods-detail">
+    <div class="goods-detail-container">
         <van-nav-bar
                 title="商品详情页"
                 :fixed=true
@@ -11,23 +11,23 @@
         <van-swipe class="goods-detail-swipe"
                    :autoplay="3000"
         >
-            <van-swipe-item v-for="(item,index) in goods.imageList">
-                <van-image width="100%" height="280" :src="item.image"/>
+            <van-swipe-item v-for="(pic_url,index) in goods.pic_urls">
+                <van-image width="100%" height="280" :src="pic_url"/>
             </van-swipe-item>
         </van-swipe>
 
         <van-row class="goods-detail-base">
             <van-col span="20">
                 <div class="goods-detail-base-name">{{goods.name}}</div>
-                <div class="goods-detail-base-title">{{goods.subTitle}}</div>
+                <div class="goods-detail-base-title">{{goods.subtitle}}</div>
             </van-col>
             <van-col class="goods-detail-base-share" span="4">
-                <van-icon class="iconfont" class-prefix="icon" name="fenxiang"></van-icon>
+                <van-icon class="iconfont" class-prefix="icon" name="fenxiang"/>
             </van-col>
         </van-row>
 
         <!-- 秒杀提示 -->
-        <van-row class="goods-detail-seckill" v-show="is_seckill===true">
+        <!--<van-row class="goods-detail-seckill" v-show="is_seckill===true">
             <van-col span="16" class="goods-detail-seckill-price">
                 <van-row>
                     <van-col span="8" class="seckill-price">
@@ -36,7 +36,9 @@
                     <van-col span="16" class="price">
                         <p> {{goods.price|moneyFormat}}</p>
                         <div class="tag">
-                            <div class="icon"><van-icon name="clock-o"/></div>
+                            <div class="icon">
+                                <van-icon name="clock-o"/>
+                            </div>
                             <div class="text">有来秒杀</div>
                         </div>
                     </van-col>
@@ -54,12 +56,12 @@
                     </template>
                 </van-count-down>
             </van-col>
-        </van-row>
+        </van-row>-->
 
-        <van-row class="goods-detail-sales" v-show="is_seckill!==true">
+        <van-row class="goods-detail-sales" v-show="seckill!==true">
             <van-col span="16" class="goods-detail-sales-price">
                  <span class="goods-detail-sales-price-promotion">
-                    {{goods.promotionPrice|moneyFormat}}
+                    {{goods.price|moneyFormat}}
                 </span>
                 <span class="goods-detail-sales-price-origin">
                     {{goods.price|moneyFormat}}
@@ -67,21 +69,25 @@
 
             </van-col>
             <van-col span="8" class="goods-detail-sales-volume" align="right">
-                销量: {{goods.salesVolume}} 件
+                销量: {{goods.sales_volume}} 件
             </van-col>
         </van-row>
 
 
-        <van-cell title="规格" class="goods-detail-sku" is-link @click="onShowSkuClicked"/>
+        <van-cell title="规格" class="goods-detail-sku" is-link @click="showSkuClicked"/>
 
         <van-row class="goods-detail-attribute">
             <van-cell-group title="商品参数">
-                <van-cell :title="attribute.name" :value="attribute.value" v-for="attribute in goods.attributeList"/>
+                <van-cell
+                        v-for="attribute in goods.attribute_list"
+                        :title="attribute.name"
+                        :value="attribute.value"
+                />
             </van-cell-group>
         </van-row>
 
         <van-row class="goods-detail-detail">
-            商品展示详情啊
+            {{goods.detail}}
         </van-row>
 
         <van-row class="goods-detail-faq">
@@ -108,74 +114,30 @@
             >
                 <template #sku-actions="props">
                     <div class="van-sku-actions">
-                        <!-- 空槽移除sku的按钮 -->
+                        <!-- 空槽是为了移除sku的按钮 -->
                     </div>
                 </template>
-
             </van-sku>
         </van-action-sheet>
     </div>
 </template>
 
 <script>
-    import {getGoodsInfo, getGoodsSku} from '@/api/goods'
+    import {goodsDetail} from '@/api/goods'
     import {mapMutations, mapState} from "vuex"
     import {Toast} from "vant"
-    import axios from 'axios'
 
     export default {
         name: "index",
         data() {
             return {
-                time: 30 * 60 * 60 * 1000,
-                is_seckill: this.$route.params.is_seckill,
-                goodsId: this.$route.params.goodsId,
+                seckill: this.$route.params.seckill, // 页面传值：是否秒杀商品
+                goodsId: this.$route.params.goodsId, // 页面传值：商品ID
                 goods: {},
-                showSku: false,
                 quota: 1, // 限购件数
-                sku: {  // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
-                    // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
-                    tree: [
-                        {
-                            k: '颜色', // skuKeyName：规格类目名称
-                            v: [
-                                {
-                                    id: '30349', // skuValueId：规格值 id
-                                    name: '红色', // skuValueName：规格值名称
-                                    imgUrl: 'https://img.yzcdn.cn/1.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
-                                    previewImgUrl: 'https://img.yzcdn.cn/1p.jpg', // 用于预览显示的规格类目图片
-                                },
-                                {
-                                    id: '1215',
-                                    name: '蓝色',
-                                    imgUrl: 'https://img.yzcdn.cn/2.jpg',
-                                    previewImgUrl: 'https://img.yzcdn.cn/2p.jpg',
-                                }
-                            ],
-                            k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-                        }
-                    ],
-                    // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
-                    list: [
-                        {
-                            id: '2259', // skuId，下单时后端需要
-                            price: 100, // 价格（单位分）
-                            s1: '1215', // 规格类目 k_s 为 s1 的对应规格值 id
-                            s2: '1193', // 规格类目 k_s 为 s2 的对应规格值 id
-                            s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-                            stock_num: 110 // 当前 sku 组合对应的库存
-                        }
-                    ]
-                },
-                    // },
-                initialSku: {
-                    // 键：skuKeyStr（sku 组合列表中当前类目对应的 key 值）
-                    // 值：skuValueId（规格值 id）
-                    s1: '1001',
-                    s2: '2001',
-                    // 初始选中数量
-                    selectedNum: 1
-                }
+                sku: {},
+                showSku: false,
+                time: 30 * 60 * 60 * 1000,
             }
         },
         computed: {
@@ -202,33 +164,19 @@
         methods: {
             ...mapMutations(['ADD_TO_CART']),
             initData() {
-                this.getGoodsInfo(this.goodsId)
-                let that=this
-                /*axios.get("http://localhost:9999/pms/api.app/v1/spus/1250428037998395393").then(function (response) {
-
-                    that.sku= response.data.data.sku
-                    console.log(that.sku)
-
-                }).catch(function (error) {
-                })*/
-
-                this.getGoodsSku()
+                goodsDetail(this.goodsId).then(response => {
+                    if (response.data) {
+                        this.goods = response.data
+                        console.log(this.goods)
+                    } else {
+                        this.goods = {}
+                    }
+                })
             },
             onClickLeft() {
                 this.$router.go(-1)
             },
-            getGoodsInfo() {
-                getGoodsInfo(this.goodsId).then(response => {
-                    this.goods = response.data
-                })
-            },
-            getGoodsSku() {
-                getGoodsSku().then(response => {
-                    this.sku = response.data
-                    console.log(this.sku)
-                })
-            },
-            onShowSkuClicked() {
+            showSkuClicked() {
                 this.showSku = true
             },
             onBuyClicked() {
@@ -259,60 +207,68 @@
 </script>
 
 <style lang="less" scoped>
-    .goods-detail {
+    .goods-detail-container {
         &-swipe {
             height: 280px;
         }
 
         &-seckill {
             background: #ffffff;
+
             &-price {
                 background: #F75B52;
                 color: #ffffff;
+
                 .seckill-price {
                     font-size: 20px;
                     font-weight: 500;
                     padding-left: 20px;
                     height: 50px;
-                    line-height:50px;
+                    line-height: 50px;
                 }
+
                 .price {
                     font-size: 14px;
                     text-decoration: line-through;
-                    margin:10px 0 0 10px;
+                    margin: 10px 0 0 10px;
                     width: 100px;
+
                     .tag {
                         font-size: 12px;
                         display: inline-block;
                         border: 1px solid #ffffff;
                         text-align: center;
+
                         .icon {
                             display: inline-block;
                             color: #F75B52;
                             background: #ffffff;
-                            padding-top:3px ;
+                            padding-top: 3px;
                             width: 20px;
                             height: 16px;
                             float: left;
                             vertical-align: middle;
                         }
+
                         .text {
                             float: left;
                             color: #ffffff;
                             background: #F75B52;
                             width: 55px;
-                            padding-top:3px ;
+                            padding-top: 3px;
                         }
                     }
                 }
             }
 
             &-time {
-                padding:5px 10px 0 0;
-                .tip{
+                padding: 5px 10px 0 0;
+
+                .tip {
                     font-size: 12px;
                     color: #666666;
                 }
+
                 .item {
                     display: inline-block;
                     width: 20px;
@@ -324,12 +280,14 @@
                     color: #F75B52;
                     border: 1px solid #f3f3f3;
                 }
-                .split{
+
+                .split {
                     color: #F75B52;
                     margin-right: 2px;
                 }
             }
         }
+
         &-sales {
             background: #FFFFFF;
             padding: 16px;

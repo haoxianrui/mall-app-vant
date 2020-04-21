@@ -1,5 +1,17 @@
 import request from '@/utils/request'
 
+
+export function categoryList(params) {
+    return request({
+        url:'/pms/api.app/v1/categories',
+        params:params,
+        method:'get'
+    })
+}
+
+//////////上面1个方法替代下面3个方法////////////////
+
+
 export function getCategoryList() {
     return request({
         url: '/v1/categories/getCategoryList',

@@ -64,9 +64,10 @@
         methods: {
             gotoGoodsDetail(goodsId) {
                 this.$router.push({
-                    name: 'goods', params: {
-                        goodsId : goodsId,
-                        is_seckill : true
+                    name: 'goods',
+                    params: {
+                        goodsId: goodsId,
+                        seckill: true
                     }
                 })
             }
@@ -83,26 +84,32 @@
         .goods-content {
             display: flex;
             justify-content: flex-start;
+
             .goods-item {
                 align-items: center;
-                margin-left:10px;
-                &-img{
+                margin-left: 10px;
+
+                &-img {
                     width: 80px;
                     height: 80px;
                     margin: 0 auto;
                 }
-                &-name{
+
+                &-name {
 
                 }
-                &-price{
+
+                &-price {
                     text-align: center;
-                    &-spike{
+
+                    &-spike {
                         font-size: 14px;
                         color: #FB0017;
                     }
-                    &-original{
+
+                    &-original {
                         font-size: 12px;
-                        text-decoration:line-through;
+                        text-decoration: line-through;
                         color: #999999;
                     }
                 }

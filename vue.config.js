@@ -13,16 +13,16 @@ module.exports = {
     proxy: {
       // 配置跨域处理
       '/api': {
-        target: 'http://127.0.0.1:8080',
+        target: 'http://www.youlai.store:9999',
         changeOrigin: true,
-     /*   pathRewrite: {
+        pathRewrite: {
           '/api': ''
-        }*/
+        }
       }
     }
   },
   configureWebpack: {
-    name: "社区微商城",
+    name: "有来超市",
     resolve: {
       alias: {
         '@': resolve('src')

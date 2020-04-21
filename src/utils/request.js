@@ -2,7 +2,7 @@ import axios from 'axios'
 import {Toast} from 'vant'
 
 const service = axios.create({
-    baseURL: 'https://mockapi.eolinker.com/yAhaMgA53e135452bad0a2f1c93fdec629103389d418fd9/api',
+    baseURL: '/api',
     withCredentials: true,
     timeout: 50000
 })
