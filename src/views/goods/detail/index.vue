@@ -87,7 +87,7 @@
         </van-row>
 
         <van-row class="goods-detail-detail">
-            {{goods.detail}}
+            <div v-html="goods.detail" style="width: 100%;"></div>
         </van-row>
 
         <van-row class="goods-detail-faq">
@@ -208,6 +208,7 @@
 
 <style lang="less" scoped>
     .goods-detail-container {
+
         &-swipe {
             height: 280px;
         }
@@ -366,6 +367,10 @@
             background: #FFFFFF;
             margin-top: 10px;
             padding: 10px;
+
+            img{
+                width: 100%;
+            }
         }
 
         &-faq {
@@ -381,4 +386,5 @@
             border-radius: 0
         }
     }
+
 </style>

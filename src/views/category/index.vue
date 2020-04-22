@@ -23,7 +23,7 @@
                             v-for="(item,index) in subCategoryList"
                             :key="index"
                             :text="item.name"
-                            @click="gotoCategoryList(item.id,item.name)"
+                            @click="gotoCategoryList()"
                     >
                         <template #icon>
                             <van-image  :src="item.icon_url" />
@@ -90,10 +90,10 @@
                     this.subCategoryList = response.data
                 })
             },
-            gotoCategoryList(categoryId, categoryName) {
+            gotoCategoryList() {
                 this.$router.push({
                     path: '/dashboard/category/list',
-                    query: {categoryId: categoryId, categoryName: categoryName}
+                    query: {categoryId: this.currentCategory.id, categoryName: this.currentCategory.name}
                 })
             }
         }

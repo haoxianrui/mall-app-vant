@@ -4,14 +4,14 @@ export function goodsList(params) {
     return request({
         url: '/pms/api.app/v1/goods',
         params: params,
-        method: get
+        method: 'get'
     })
 }
 
 export function goodsDetail(id) {
     return request({
         url:'/pms/api.app/v1/goods/'+id,
-        method:get
+        method:'get'
     })
 
 }

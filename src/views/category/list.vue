@@ -56,10 +56,11 @@
         },
         methods: {
             initData: function () {
+                console.log(this.parentCategory.name)
+
                 let params = {
                     parent_id: this.parentCategory.id
                 }
-
                 // tab分类列表数据加载
                 categoryList(params).then(response => {
                     this.categoryList = []
