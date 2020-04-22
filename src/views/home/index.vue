@@ -2,10 +2,10 @@
     <div>
         <div v-if="!isShowLoading">
             <!-- 轮播图 -->
-            <ad-carousel :advertisementList="advertisementList"/>
+            <ad-carousel :advertList="advertList"/>
 
             <!-- 分类导航 -->
-            <category-nav :goodsCategoryList="goodsCategoryList"/>
+            <category-nav :categoryList="categoryList"/>
 
             <!-- 秒杀专区 -->
             <spike :spikeInfo="spikeInfo"/>
@@ -20,7 +20,10 @@
 </template>
 
 <script>
-    import {getAdList, getGoodsCategoryList, getSeckillInfo, getHotGoodsList, getHomeData} from "@/api/home"
+    import {advertList} from '@/api/home'
+    import {categoryList} from '@/api/category'
+
+
     import loading from '@/components/loading/LoadingGif'
     import AdCarousel from './components/AdCarousel'
     import CategoryNav from './components/CategoryNav'
@@ -33,11 +36,11 @@
         },
         data() {
             return {
-                isShowLoading: true,     // 是否加载动画
-                advertisementList: undefined,   // 广告轮播图
-                goodsCategoryList: undefined,   // 商品分类
-                spikeInfo: undefined,        // 秒杀商品
-                hotGoodsList: undefined
+                isShowLoading: false,     // 是否加载动画
+                advertList: [],   // 广告轮播图
+                categoryList: [],   // 商品分类
+                spikeInfo: {},        // 秒杀商品
+                hotGoodsList: []
             }
         },
         components: {
@@ -48,28 +51,43 @@
             Hot
         },
         methods: {
-            async _initData() {
+            _initData() {
 
                 // 广告轮播
-                getAdList().then(response => {
-                    this.advertisementList = response.data
+                let params = {
+                    limit: 5   // 广告条数
+                }
+
+                advertList(params).then(response => {
+                    this.advertList = response.data
                 })
 
-                // 商品分类
-                getGoodsCategoryList().then(response => {
-                    this.goodsCategoryList = response.data
+
+                params = {
+                    limit: 10, // 分类条数
+                    level: 1 //分类级别
+                }
+
+                categoryList(params).then(response => {
+                    this.categoryList = response.data
                 })
 
-                // 秒杀商品
-                getSeckillInfo().then(response => {
-                    this.spikeInfo = response.data
-                })
 
-                // 人气推荐商品
-                getHotGoodsList().then(response => {
-                    this.hotGoodsList=response.data
-                })
-                this.isShowLoading = false
+                /*    // 商品分类
+                    getGoodsCategoryList().then(response => {
+                        this.goodsCategoryList = response.data
+                    })
+
+                    // 秒杀商品
+                    getSeckillInfo().then(response => {
+                        this.spikeInfo = response.data
+                    })
+
+                    // 人气推荐商品
+                    getHotGoodsList().then(response => {
+                        this.hotGoodsList=response.data
+                    })*/
+                //this.isShowLoading = false
             }
         }
     }

@@ -1,12 +1,14 @@
 import request from '@/utils/request'
 
-// 广告轮播图
-export function getAdList() {
+
+
+export function advertList() {
     return request({
-        url:'/v1/home/advertisement',
-        method:'get'
+        url: '/sms/api.app/v1/adverts',
+        method: 'get'
     })
 }
+
 
 // 商品分类导航
 export function getGoodsCategoryList() {

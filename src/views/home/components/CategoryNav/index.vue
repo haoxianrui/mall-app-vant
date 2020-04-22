@@ -3,11 +3,11 @@
     <div>
         <van-grid :column-num="5" :border="false">
             <van-grid-item
-                    v-for="(item,index) in goodsCategoryList"
-                    :key="item.categoryId"
-                    :icon="item.icon"
-                    :text="item.categoryName"
-                    @click="handleClick(item.categoryId)"
+                    v-for="(item,index) in categoryList"
+                    :key="item.id"
+                    :icon="item.icon_url"
+                    :text="item.name"
+                    @click="gotoCategoryList(item.id)"
             />
         </van-grid>
     </div>
@@ -16,11 +16,11 @@
 <script>
     export default {
         props: {
-            goodsCategoryList: Array
+            categoryList: Array
         },
         methods: {
-            handleClick(categoryId) {
-                this.$router.push({name: 'category', params: {categoryId: categoryId}})
+            gotoCategoryList(id) {
+                this.$router.push({name: 'category', params: {id: id}})
             }
         }
     }

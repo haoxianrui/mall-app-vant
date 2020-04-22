@@ -4,12 +4,12 @@
         <div class="spike-header">
             <span class="spike-header-title">有来秒杀</span>
             <div class="spike-header-countdown">
-                <span class="spike-header-countdown-lt">
-                    {{spikeInfoData.seckill_session_name}}
-                </span>
-                <span class="spike-header-countdown-rt">
-                     <van-count-down :time="time" format="HH:mm:ss"/>
-                </span>
+                <div class="spike-header-countdown-lt">
+                    {{spikeInfoData.seckill_session_name||'8点场'}}
+                </div>
+                <div class="spike-header-countdown-rt">
+                    <van-count-down :time="time" format="HH:mm:ss"/>
+                </div>
             </div>
             <div class="spike-header-more" @click="handleMoreClick">
                 <span class="spike-header-more-text">查看全部</span>
@@ -54,70 +54,66 @@
         position: relative;
         background: #ffffff;
         height: 150px;
+        margin-top: 10px;
 
         &-header {
             padding: 0 10px;
 
             &-title {
                 display: inline-block;
-                height: 30px;
-                line-height: 30px;
+                height: 26px;
+                line-height: 26px;
                 font-size: 14px;
                 float: left;
                 font-weight: bold;
             }
 
             &-countdown {
-                margin-left: 10px;
-                display: inline-block;
-                margin-top: -2px;
+                float: left;
 
+                margin-top: 1px;
                 &-lt {
-                    display: inline-block;
+                    margin-top: 1px;
+                    margin-left: 10px;
                     font-size: 12px;
                     border: 1px solid #FB0017;
                     border-right: none;
                     border-bottom-left-radius: 22px;
                     border-top-left-radius: 22px;
-                    height: 20px;
-                    line-height: 20px;
+                    height: 18px;
+                    line-height: 18px;
                     padding: 0 3px;
                     color: #ffffff;
                     background: #FB0017;
+                    float: left;
                 }
 
                 &-rt {
-                    .van-count-down {
-                        font-size: 12px;
-                    }
-
-                    display: inline-block;
+                    margin-top: 1px;
+                    font-size: 12px;
+                    float: left;
                     border: 1px solid #FB0017;
                     border-bottom-right-radius: 22px;
                     border-top-right-radius: 22px;
-                    height: 20px;
-                    line-height: 20px;
+                    height: 18px;
+                    line-height: 18px;
                     padding: 0 3px;
                 }
-
-                height: 30px;
-                line-height: 30px;
             }
 
             &-more {
                 float: right;
 
                 &-text {
-                    display: inline-block;
-                    height: 30px;
-                    line-height: 30px;
+                    height: 24px;
+                    line-height: 24px;
                     font-size: 14px;
                 }
 
                 .van-icon {
-                    margin-left: 5px;
-                    height: 28px;
-                    line-height: 28px;
+                    margin-left: 2px;
+                    height: 22px;
+                    line-height: 22px;
                     float: right;
                 }
             }

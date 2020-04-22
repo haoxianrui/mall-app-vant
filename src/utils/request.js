@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {Toast} from 'vant'
 
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 const service = axios.create({
     baseURL: '/api',
     withCredentials: true,
@@ -10,9 +11,6 @@ const service = axios.create({
 /** 请求拦截器 */
 service.interceptors.request.use(
     config => {
-        if (config.method.toUpperCase() === 'GET') {
-            // 添加随机code 避免请求缓存
-        }
         return config
     },
     error => {

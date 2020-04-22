@@ -11,15 +11,14 @@
                     />
                 </van-sidebar>
             </van-col>
-            <van-col span="18" style="overflow-y:auto">
+            <van-col span="18" style="overflow-y:auto;">
                 <van-image
-                        style="margin: 0 auto"
                         width="100%"
-                        height="100"
-                        :src="currentCategory.icon_url"
+                        height="145"
+                        :src="currentCategory.pic_url"
                 />
                 <van-divider>{{currentCategory.name}}</van-divider>
-                <van-grid :gutter="10" :column-num="3" :border="false">
+                <van-grid :gutter="10" :column-num="2" :border="false">
                     <van-grid-item
                             v-for="(item,index) in subCategoryList"
                             :key="index"
@@ -27,7 +26,7 @@
                             @click="gotoCategoryList(item.id,item.name)"
                     >
                         <template #icon>
-                            <van-image :src="item.icon_url"/>
+                            <van-image  :src="item.icon_url" />
                         </template>
                     </van-grid-item>
                 </van-grid>
@@ -52,7 +51,8 @@
                     id: undefined,
                     name: undefined,
                     icon_url: undefined,
-                    description: undefined
+                    description: undefined,
+                    pic_url:undefined
                 }
             }
         },
@@ -103,9 +103,11 @@
 <style lang="less">
     .category-container {
         background: #FFFFFF;
+
         height: 100%;
 
         .category {
+            width: 100%;
             display: flex;
             position: absolute;
             top: 54px;
@@ -119,6 +121,10 @@
             .van-divider::after, .van-divider::before {
                 height: 0;
                 border-width: 2px 0 0;
+            }
+            .van-image{
+                width:40px;
+                height: 40px;
             }
         }
 

@@ -17,10 +17,6 @@ export function goodsDetail(id) {
 }
 
 
-
-
-
-
 export function getGoodsListByCategory(categoryId) {
     return request({
         url: '/v1/goods/getGoodsListByCategory',

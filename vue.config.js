@@ -1,3 +1,4 @@
+'use strict'
 const path = require('path');
 
 function resolve(dir) {
@@ -9,14 +10,13 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: 8080,
-    open: true, // 自动启动浏览器
     proxy: {
       // 配置跨域处理
-      '/api': {
+      ['/api']: {
         target: 'http://www.youlai.store:9999',
         changeOrigin: true,
         pathRewrite: {
-          '/api': ''
+          '^/api': ''
         }
       }
     }

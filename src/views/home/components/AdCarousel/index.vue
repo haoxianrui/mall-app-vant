@@ -2,8 +2,8 @@
 <template>
     <div>
         <van-swipe :autoplay="3000">
-            <van-swipe-item v-for="(item, index) in advertisementList" :key="index">
-                <img v-lazy="item.imageUrl" :alt="item.name"/>
+            <van-swipe-item v-for="(item, index) in advertList" :key="index">
+                <img v-lazy="item.pic_url" :alt="item.name"/>
             </van-swipe-item>
         </van-swipe>
     </div>
@@ -12,14 +12,14 @@
 <script>
     export default {
         props: {
-            advertisementList: Array
+            advertList: Array
         }
     }
 </script>
 
 <style lang="less" scoped>
     .van-swipe {
-        height: 280px;
+        height: 220px;
         &-item {
             color: #fff;
             font-size: 20px;
