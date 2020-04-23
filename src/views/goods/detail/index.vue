@@ -61,10 +61,10 @@
         <van-row class="goods-detail-sales" v-show="seckill!==true">
             <van-col span="16" class="goods-detail-sales-price">
                  <span class="goods-detail-sales-price-promotion">
-                    {{goods.price|moneyFormat}}
+                    {{goods.retail_price|moneyFormat}}
                 </span>
                 <span class="goods-detail-sales-price-origin">
-                    {{goods.price|moneyFormat}}
+                    {{goods.counter_price|moneyFormat}}
                 </span>
 
             </van-col>
@@ -138,6 +138,7 @@
                 quota: 1, // 限购件数
                 showSku: false,
                 time: 30 * 60 * 60 * 1000,
+                selectedGoods: undefined
             }
         },
         computed: {
@@ -191,7 +192,32 @@
                     return
                 }
                 this.showSku = false
-                this.$router.push({name: 'order', params: {type: 1, sku_ids: sku.selectedSku}});
+
+                let spec_list = this.goods.spec_list
+
+                let specs_desc = ''
+                if (skuData.selectedSkuComb.s1&&skuData.selectedSkuComb.s1!=='0') {
+                    specs_desc += spec_list.filter(item => item.id === skuData.selectedSkuComb.s1).map(item => item.name + ':' + item.value + ';')[0]
+                }
+
+                if (skuData.selectedSkuComb.s2&&skuData.selectedSkuComb.s2!=='0') {
+                    specs_desc +=  spec_list.filter(item => item.id === skuData.selectedSkuComb.s2).map(item => item.name + ':' + item.value + ';')[0]
+                }
+
+                if (skuData.selectedSkuComb.s3&&skuData.selectedSkuComb.s3!=='0') {
+                    specs_desc +=  spec_list.filter(item => item.id === skuData.selectedSkuComb.s3).map(item => item.name + ':' + item.value + ';')[0]
+                }
+
+                this.selectedGoods = { // 购买商品信息
+                    spu_name: this.goods.name, // 商品名称
+                    spu_id: this.goods.id, // 商品id
+                    sku_id:skuData.selectedSkuComb.id, // 商品sku_id
+                    sku_price: skuData.selectedSkuComb.price/100, // 商品价格
+                    sku_quantity: skuData.selectedNum, // 购买数量
+                    pic_url: this.goods.pic_url, // 图片路径
+                    specs_desc: specs_desc  // 规格描述
+                }
+                this.$router.push({name: 'order', params: {type: 1, goods: this.selectedGoods}});
             },
             onAddCartClicked() {
                 let goods = {

@@ -22,12 +22,15 @@
                     v-for="(item,index) in goodsList"
                     :key="index"
                     :num="item.num"
-                    :price="item.price"
-                    desc="描述信息"
+                    :desc="item.specs_desc"
                     :title="item.name"
-                    :thumb="item.image">
+                    :thumb="item.pic_url">
                 <template #tags>
                     <van-tag plain type="danger">七天无理由退货</van-tag>
+                </template>
+
+                <template #price>
+                    {{item.price|moneyFormat}}
                 </template>
             </van-card>
         </van-cell-group>
@@ -70,10 +73,10 @@
         <!-- 商品金额 -->
         <van-cell-group style="margin-top: 0.6rem">
             <van-cell title="商品金额">
-                <div class="money">{{(selectedTotalPrice/100) | moneyFormat }}</div>
+                <div class="money">{{(selectedTotalPrice) | moneyFormat }}</div>
             </van-cell>
             <van-cell title="运费">
-                <div class="money">{{(freight/100)|moneyFormat}}</div>
+                <div class="money">{{(freight)|moneyFormat}}</div>
             </van-cell>
         </van-cell-group>
 
@@ -83,11 +86,7 @@
                 label="实付"
                 @submit="onSubmit"
         />
-        <!-- 路由出口 -->
-        <transition name="router-slider"
-                    mode="out-in">
-            <router-view @getConcat="getConcat"></router-view>
-        </transition>
+        <router-view  />
     </div>
 </template>
 
@@ -96,6 +95,7 @@
     import {coupon} from '@/api/user'
     import {Toast} from 'vant'
     import PubSub from 'pubsub-js'
+    import {orderSubmit, orderToken} from "@/api/order";
 
     export default {
         data() {
@@ -111,8 +111,15 @@
                 chosenCoupon: -1,
                 disabledCoupons: [],
                 showCoupon: false, // 是否显示优惠券
-                freight: 800, // 运费
-                goodsList:[]
+                freight: 8, // 运费
+                goodsList: [],
+                selectedTotalPrice: 0,
+                orderToken: undefined,
+                orderDTO: {
+                    order: undefined,
+                    order_item_list: undefined,
+                    order_token: undefined
+                }
             }
         },
         created() {
@@ -124,8 +131,8 @@
         },
         mounted() {
             this.initData()
-            let that=this
-            PubSub.subscribe("order_choose_address", (msg, data) => {
+            let that = this
+            PubSub.subscribe("order_choose_address", (msg, data) => { // 选中地址后通知订单页面
                 if (msg == "order_choose_address") {
                     if (data) {
                         that.concat.name = data.name
@@ -141,7 +148,6 @@
             ...mapGetters({
                 selectedCount: 'SELECTED_GOODS_COUNT',
                 goods: 'SELECTED_GOODS',
-                selectedTotalPrice: 'SELECTED_GOODS_PRICE'
             }),
             actualPrice() {
                 let finalPrice = this.selectedTotalPrice + this.freight
@@ -153,16 +159,20 @@
             },
         },
         methods: {
-            initData(){
-                let type= this.$route.params.type
-                if(type === 1){
-                    console.log("==== 立即购买进入 ====")
-                    this.goodsList=[]
-                    let sku_ids= this.$route.params.sku_ids
-                    this.goodsList.push({})
-                }else{
-                    console.log("====  购物车进入 ==== ")
-                    this.goodsList=this.goods
+            initData() {
+                // 页面进入随机生成token，放置表单重复提交
+                orderToken().then(response => {
+                    this.orderToken = response.data
+                })
+
+                let type = this.$route.params.type
+                if (type === 1) {  // 立即购买进入
+                    this.goodsList = []
+                    let goods = this.$route.params.goods
+                    this.goodsList.push(goods)
+                    this.selectedTotalPrice = goods.price * goods.num
+                } else { // 购物车进入
+                    this.goodsList = this.goods
                 }
             },
             onClickLeft() {
@@ -170,16 +180,7 @@
             },
             // 选择地址
             chooseConcat() {
-                this.$router.push({path: '/dashboard/user/address',query:{type:1}});
-            },
-            // 获取地址
-            getConcat(data) {
-                if (data) {
-                    this.concat.name = data.name
-                    this.concat.tel = data.tel
-                    this.concat.address = data.address
-                    this.concat.type = 'edit'
-                }
+                this.$router.push({path: '/dashboard/user/address', query: {type: 1}});
             },
             onChange(index) {
                 this.showCoupon = false
@@ -194,10 +195,20 @@
                         message: '请选择收货地址',
                         duration: 800
                     })
-                } else {
-                    // 提交订单逻辑 todo
-                    this.$router.push({path: '/order/payment', query: {paymentAmount: this.actualPrice}})
+                    return
                 }
+                // 提交订单逻辑
+                orderSubmit(this.orderDTO).then(response=>{
+                    // TODO...
+                    if(response.code===0){
+                        // 提交成功
+
+                        this.$router.push({path: '/order/payment', query: {paymentAmount: this.actualPrice}})
+                    }else{
+                        Toast(response.msg)
+                    }
+                })
+
             },
 
         }
