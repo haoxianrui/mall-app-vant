@@ -1,5 +1,5 @@
 <template>
-    <div class="goods-detail-container">
+    <div class="goods-detail">
         <van-nav-bar
                 title="商品详情页"
                 :fixed=true
@@ -106,11 +106,12 @@
         <van-action-sheet v-model="showSku" title="标题">
             <van-sku
                     v-model="showSku"
-                    :sku="sku"
+                    :sku="goods.sku"
                     :goods="goods"
                     :goods-id="goodsId"
                     :quota="quota"
                     ref="sku"
+
             >
                 <template #sku-actions="props">
                     <div class="van-sku-actions">
@@ -135,7 +136,6 @@
                 goodsId: this.$route.params.goodsId, // 页面传值：商品ID
                 goods: {},
                 quota: 1, // 限购件数
-                sku: {},
                 showSku: false,
                 time: 30 * 60 * 60 * 1000,
             }
@@ -167,7 +167,7 @@
                 goodsDetail(this.goodsId).then(response => {
                     if (response.data) {
                         this.goods = response.data
-                        console.log(this.goods)
+                        this.goods.picture = response.data.pic_url
                     } else {
                         this.goods = {}
                     }
@@ -206,10 +206,10 @@
     }
 </script>
 
-<style lang="less" scoped>
-    .goods-detail-container {
-
+<style lang="less">
+    .goods-detail {
         &-swipe {
+            padding-top: 46px;
             height: 280px;
         }
 
@@ -368,7 +368,7 @@
             margin-top: 10px;
             padding: 10px;
 
-            img{
+            img {
                 width: 100%;
             }
         }
