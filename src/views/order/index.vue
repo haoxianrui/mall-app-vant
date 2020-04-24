@@ -21,16 +21,16 @@
             <van-card
                     v-for="(item,index) in goodsList"
                     :key="index"
-                    :num="item.num"
+                    :num="item.sku_quantity"
                     :desc="item.specs_desc"
-                    :title="item.name"
+                    :title="item.spu_name"
                     :thumb="item.pic_url">
                 <template #tags>
                     <van-tag plain type="danger">七天无理由退货</van-tag>
                 </template>
 
                 <template #price>
-                    {{item.price|moneyFormat}}
+                    {{item.sku_price|moneyFormat}}
                 </template>
             </van-card>
         </van-cell-group>
@@ -61,7 +61,8 @@
 
         <!-- 备注 -->
         <van-cell-group style="margin-top: 0.6rem">
-            <van-field label="备注"
+            <van-field v-model="buyerMessage"
+                       label="备注"
                        type="textarea"
                        placeholder="选填"
                        rows="1"
@@ -81,11 +82,14 @@
         </van-cell-group>
 
         <van-submit-bar
-                :price="actualPrice"
                 button-text="提交订单"
                 label="实付"
                 @submit="onSubmit"
-        />
+        >
+            <template #price>
+                {{actualPrice|moneyFormat}}
+            </template>
+        </van-submit-bar>
         <router-view  />
     </div>
 </template>
@@ -114,20 +118,21 @@
                 freight: 8, // 运费
                 goodsList: [],
                 selectedTotalPrice: 0,
-                orderToken: undefined,
+                buyerMessage: undefined,
+
                 orderDTO: {
-                    order: undefined,
-                    order_item_list: undefined,
+                    order: {},
+                    order_item_list: [],
                     order_token: undefined
                 }
             }
         },
         created() {
-            coupon().then(response => {
-                if (response.data) {
-                    this.coupons = response.data
-                }
-            })
+            // coupon().then(response => {
+            //     if (response.data) {
+            //         this.coupons = response.data
+            //     }
+            // })
         },
         mounted() {
             this.initData()
@@ -162,7 +167,7 @@
             initData() {
                 // 页面进入随机生成token，放置表单重复提交
                 orderToken().then(response => {
-                    this.orderToken = response.data
+                    this.orderDTO.order_token = response
                 })
 
                 let type = this.$route.params.type
@@ -170,7 +175,10 @@
                     this.goodsList = []
                     let goods = this.$route.params.goods
                     this.goodsList.push(goods)
-                    this.selectedTotalPrice = goods.price * goods.num
+
+                    this.orderDTO.order_item_list.push(goods)
+
+                    this.selectedTotalPrice = goods.sku_price * goods.sku_quantity
                 } else { // 购物车进入
                     this.goodsList = this.goods
                 }
@@ -190,19 +198,41 @@
                 this.coupons.push(code)
             },
             onSubmit() {
-                if (!this.concat.address) {
-                    Toast({
-                        message: '请选择收货地址',
-                        duration: 800
-                    })
-                    return
-                }
+                // if (!this.concat.address) {
+                //     Toast({
+                //         message: '请选择收货地址',
+                //         duration: 800
+                //     })
+                //     return
+                // }
                 // 提交订单逻辑
-                orderSubmit(this.orderDTO).then(response=>{
+
+                // 会员ID
+                this.orderDTO.order.member_id = "1211480307950280706"
+                // 优惠券ID
+                this.orderDTO.order.coupon_id = "1249738175305326593"
+                // 订单状态
+                this.orderDTO.order.status = 0
+                // 订单来源
+                this.orderDTO.order.source_type = 1
+
+                // 运费金额
+                this.orderDTO.order.freight_amount = this.freight
+                // 优惠券抵扣金额
+                // this.orderDTO.order.coupon_amount = this.freight
+                // 订单总额
+                this.orderDTO.order.total_amount = this.selectedTotalPrice
+                // 应付总额
+                this.orderDTO.order.pay_amount = this.actualPrice
+                // 买家留言
+                this.orderDTO.order.buyer_message = this.buyerMessage
+
+                // console.log(this.orderDTO)
+
+               orderSubmit(this.orderDTO).then(response=>{
                     // TODO...
                     if(response.code===0){
                         // 提交成功
-
                         this.$router.push({path: '/order/payment', query: {paymentAmount: this.actualPrice}})
                     }else{
                         Toast(response.msg)

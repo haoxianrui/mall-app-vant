@@ -34,7 +34,7 @@
                         <span style="vertical-align: top;margin-left: 5px">支付金额</span>
                     </van-col>
                     <van-col span="12" class="rt" style="color:#FB0017">
-                        {{(paymentAmount/100)|moneyFormat}}
+                        {{(paymentAmount)|moneyFormat}}
                     </van-col>
                 </van-row>
             </van-cell>

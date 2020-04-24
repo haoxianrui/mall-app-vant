@@ -217,6 +217,7 @@
                     pic_url: this.goods.pic_url, // 图片路径
                     specs_desc: specs_desc  // 规格描述
                 }
+                // console.log(this.selectedGoods)
                 this.$router.push({name: 'order', params: {type: 1, goods: this.selectedGoods}});
             },
             onAddCartClicked() {

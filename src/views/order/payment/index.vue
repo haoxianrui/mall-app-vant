@@ -22,7 +22,7 @@
             <van-cell :border="false" style="font-size: 14px">
                 支付金额
                 <span style="color: #FB0017;font-size: 14px;font-weight: bold;margin-left: 5px">
-                    {{(paymentAmount/100)|moneyFormat}}
+                    {{(paymentAmount)|moneyFormat}}
                 </span>
             </van-cell>
         </van-cell-group>
