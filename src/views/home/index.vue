@@ -8,7 +8,7 @@
             <category-nav :categoryList="categoryList"/>
 
             <!-- 秒杀专区 -->
-            <spike :spikeInfo="spikeInfo"/>
+            <spike :seckillGoodsList="seckillGoodsList"/>
 
             <hot :hotGoodsList="hotGoodsList"/>
             <!-- 回到顶部按钮 -->
@@ -22,6 +22,7 @@
 <script>
     import {advertList} from '@/api/home'
     import {categoryList} from '@/api/category'
+    import {goodsList} from '@/api/goods'
 
 
     import loading from '@/components/loading/LoadingGif'
@@ -39,7 +40,7 @@
                 isShowLoading: false,     // 是否加载动画
                 advertList: [],   // 广告轮播图
                 categoryList: [],   // 商品分类
-                spikeInfo: {},        // 秒杀商品
+                seckillGoodsList: {},        // 秒杀商品
                 hotGoodsList: []
             }
         },
@@ -72,22 +73,16 @@
                     this.categoryList = response.data
                 })
 
+                goodsList().then(response=>{
+                    this.hotGoodsList=response.data
+                })
 
-                /*    // 商品分类
-                    getGoodsCategoryList().then(response => {
-                        this.goodsCategoryList = response.data
-                    })
 
-                    // 秒杀商品
-                    getSeckillInfo().then(response => {
-                        this.spikeInfo = response.data
-                    })
+                goodsList().then(response => {
+                    this.seckillGoodsList = response.data
+                })
 
-                    // 人气推荐商品
-                    getHotGoodsList().then(response => {
-                        this.hotGoodsList=response.data
-                    })*/
-                //this.isShowLoading = false
+                this.isShowLoading = false
             }
         }
     }

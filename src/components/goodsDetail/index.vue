@@ -44,8 +44,8 @@
             <van-cell style="padding-bottom: 0" :border="false" :title="goods.name" :label="goods.desc"/>
             <van-cell style="padding-top: 0" :border="false">
                 <van-col span="10">
-                    <span class="price">{{goods.price }}</span>
-                    <span class="origin-price">{{goods.originPrice | moneyFormat}}</span>
+                    <span class="price">{{goods.retail_price }}</span>
+                    <span class="origin-price">{{goods.counter_price | moneyFormat}}</span>
                 </van-col>
                 <van-col span="14" class="stock">剩余库存：{{ goods.stock }}</van-col>
             </van-cell>

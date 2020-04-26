@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 // 优惠券
-export function getCouponList() {
+export function couponList(params) {
     return request({
-        url:'/v1/users/coupons',
-        method:'get'
+        url: '/sms/api.app/v1/coupons',
+        method: 'get',
+        params: params
     })
 }
 

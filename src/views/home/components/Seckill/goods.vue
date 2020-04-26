@@ -8,8 +8,8 @@
             >
                 <img class="goods-item-img" v-lazy="goods.pic_url"/>
                 <div class="goods-item-price">
-                    <p class="goods-item-price-spike">{{goods.seckill_price|moneyFormat}}</p>
-                    <p class="goods-item-price-original">{{goods.price|moneyFormat}}</p>
+                    <p class="goods-item-price-spike">{{goods.retail_price|moneyFormat}}</p>
+                    <p class="goods-item-price-original">{{goods.counter_price|moneyFormat}}</p>
                 </div>
             </li>
         </ul>
@@ -78,6 +78,7 @@
 <style lang="less" scoped>
     .goods-wrapper {
         width: 100%;
+        padding-top: 25px;
         overflow: hidden;
         position: absolute;
 

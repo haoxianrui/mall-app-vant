@@ -1,6 +1,6 @@
-# shop-app
+# yshop-app
 
-> 社区微商城移动端
+> 有来微商城移动端
 
 ## Build Setup
 

@@ -12,11 +12,12 @@
             <van-card
                     class="hot-goods-item"
                     v-for="(item,index) in hotGoodsList"
-                    :price="item.goodsPrice"
-                    :desc="item.goodsSubTitle"
-                    :title="item.goodsName"
+                    :price="item.retail_price"
+                    :desc="item.description"
+                    :title="item.name"
                     tag="hot"
-                    :thumb="item.goodsPic"
+                    :thumb="item.pic_url"
+                    @click="gotoGoodsDetail(item.id)"
             >
                 <template #tags>
                     <van-tag plain type="danger">多色可选</van-tag>
@@ -36,6 +37,17 @@
             hotGoodsList: function (newValue, oldValue) {
                 this.hotGoodsList = newValue
             }
+        },
+        methods:{
+            gotoGoodsDetail(goodsId) {
+                this.$router.push({
+                    name: 'goods',
+                    params: {
+                        goodsId: goodsId
+                    }
+                })
+            }
+
         }
     }
 </script>
@@ -44,6 +56,7 @@
     .hot {
         padding: 0 10px;
         margin-top: 10px;
+
 
         &-header {
             vertical-align: middle;

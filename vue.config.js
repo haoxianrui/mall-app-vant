@@ -13,7 +13,7 @@ module.exports = {
     proxy: {
       // 配置跨域处理
       ['/api']: {
-        target: 'http://www.youlai.store:9999',
+        target: 'http://101.132.25.57:9999',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

@@ -24,7 +24,7 @@
                             >
                                 <van-image class="category-content-goods-image" :src="goods.pic_url"/>
                                 <div class="category-content-goods-title">{{goods.name}}</div>
-                                <div class="category-content-goods-price">{{goods.price|moneyFormat}}</div>
+                                <div class="category-content-goods-price">{{goods.retail_price|moneyFormat}}</div>
                             </van-grid-item>
                         </van-grid>
                     </div>
@@ -56,8 +56,6 @@
         },
         methods: {
             initData: function () {
-                console.log(this.parentCategory.name)
-
                 let params = {
                     parent_id: this.parentCategory.id
                 }

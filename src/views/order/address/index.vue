@@ -69,14 +69,9 @@
                 this.$router.push({name: 'editAddress', params: {addressId: item.id}})
             },
             onSelect(item, index) {
-                if (this.type === 1) {
-                    this.chosenAddressId = item.id
-                    PubSub.publish("order_choose_address", item)
-                    this.$router.back()
-                } else {
-
-                }
-
+                this.chosenAddressId = item.id
+                PubSub.publish("order_choose_address", item)
+                this.$router.back()
             }
         }
     }

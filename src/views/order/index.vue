@@ -85,21 +85,24 @@
                 button-text="提交订单"
                 label="实付"
                 @submit="onSubmit"
+                :price="actualPrice*100"
         >
-            <template #price>
-                {{actualPrice|moneyFormat}}
-            </template>
         </van-submit-bar>
-        <router-view  />
+
+        <!-- 路由出口 -->
+        <transition name="router-slider"
+                    mode="out-in">
+            <router-view></router-view>
+        </transition>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex'
-    import {coupon} from '@/api/user'
     import {Toast} from 'vant'
     import PubSub from 'pubsub-js'
-    import {orderSubmit, orderToken} from "@/api/order";
+    import {orderSubmit, orderToken} from '@/api/order'
+    import {couponList} from '@/api/user/coupon'
 
     export default {
         data() {
@@ -128,14 +131,10 @@
             }
         },
         created() {
-            // coupon().then(response => {
-            //     if (response.data) {
-            //         this.coupons = response.data
-            //     }
-            // })
+            this.initData()
         },
         mounted() {
-            this.initData()
+
             let that = this
             PubSub.subscribe("order_choose_address", (msg, data) => { // 选中地址后通知订单页面
                 if (msg == "order_choose_address") {
@@ -158,8 +157,9 @@
                 let finalPrice = this.selectedTotalPrice + this.freight
                 // 是否有使用优惠券
                 if (this.chosenCoupon > -1) {
-                    finalPrice = finalPrice - this.coupons[this.chosenCoupon].value
+                    finalPrice = finalPrice - this.coupons[this.chosenCoupon].value/100
                 }
+                console.log(finalPrice)
                 return finalPrice
             },
         },
@@ -168,6 +168,28 @@
                 // 页面进入随机生成token，放置表单重复提交
                 orderToken().then(response => {
                     this.orderDTO.order_token = response
+                })
+
+                // 优惠券
+                couponList().then(response => {
+                    this.coupons = []
+                    if (response.data) {
+                        response.data.forEach(item => {
+                            let coupon = {
+                                available: 1,
+                                condition: item.condition_desc,
+                                reason: item.reason,
+                                value: item.value,
+                                name: item.name,
+                                startAt: 1587823247,
+                                endAt: 1588262400,
+                                valueDesc: item.value_desc,
+                                unitDesc: '元',
+                            }
+
+                            this.coupons.push(coupon)
+                        })
+                    }
                 })
 
                 let type = this.$route.params.type
@@ -188,7 +210,7 @@
             },
             // 选择地址
             chooseConcat() {
-                this.$router.push({path: '/dashboard/user/address', query: {type: 1}});
+                this.$router.push({path: '/order/address'})
             },
             onChange(index) {
                 this.showCoupon = false
@@ -198,13 +220,13 @@
                 this.coupons.push(code)
             },
             onSubmit() {
-                // if (!this.concat.address) {
-                //     Toast({
-                //         message: '请选择收货地址',
-                //         duration: 800
-                //     })
-                //     return
-                // }
+                if (!this.concat.address) {
+                    Toast({
+                        message: '请选择收货人',
+                        duration: 800
+                    })
+                    return
+                }
                 // 提交订单逻辑
 
                 // 会员ID
@@ -227,19 +249,15 @@
                 // 买家留言
                 this.orderDTO.order.buyer_message = this.buyerMessage
 
-                // console.log(this.orderDTO)
-
-               orderSubmit(this.orderDTO).then(response=>{
-                    // TODO...
-                    if(response.code===0){
+                orderSubmit(this.orderDTO).then(response => {
+                    if (response.code === 0) {
                         // 提交成功
                         this.$router.push({path: '/order/payment', query: {paymentAmount: this.actualPrice}})
-                    }else{
+                    } else {
                         Toast(response.msg)
                     }
                 })
-
-            },
+            }
 
         }
     }
@@ -261,6 +279,12 @@
             transform: translate3d(2rem, 0, 0);
             opacity: 0;
         }
+
+        .van-cell:not(:last-child)::after {
+            left: 0 !important;
+        }
+
+
     }
 
 </style>

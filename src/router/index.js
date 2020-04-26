@@ -96,6 +96,11 @@ const router = new Router({
             component: () => import("@/views/order"),
             children: [
                 {
+                    path: 'address',
+                    name: 'orderAddress',
+                    component: () => import("@/views/order/address")
+                },
+                {
                     path: 'payment',
                     name: 'orderPayment',
                     component: () => import("@/views/order/payment"),
@@ -104,7 +109,8 @@ const router = new Router({
                         name: 'paymentResult',
                         component: () => import("@/views/order/payment/result")
                     }]
-                }]
+                }
+            ]
         },
         {
             // 登录

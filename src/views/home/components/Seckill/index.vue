@@ -5,7 +5,7 @@
             <span class="spike-header-title">有来秒杀</span>
             <div class="spike-header-countdown">
                 <div class="spike-header-countdown-lt">
-                    {{spikeInfoData.seckill_session_name||'8点场'}}
+                    {{seckillInfoData.seckill_session_name||'10点场'}}
                 </div>
                 <div class="spike-header-countdown-rt">
                     <van-count-down :time="time" format="HH:mm:ss"/>
@@ -17,28 +17,28 @@
             </div>
         </div>
         <!-- 秒杀商品 -->
-        <spike-goods :goodsList="spikeInfoData.goods_list"/>
+        <seckill-goods :goodsList="seckillGoodsList"/>
     </div>
 </template>
 
 <script>
-    import SpikeGoods from './goods'
+    import SeckillGoods from './goods'
 
     export default {
         components: {
-            SpikeGoods
+            SeckillGoods
         },
         props: {
-            spikeInfo: Object
+            seckillGoodsList: Array
         },
         watch: {
             spikeInfo: function (newValue, oldValue) {
-                this.spikeInfoData = newValue
+                this.seckillInfoData = newValue
             }
         },
         data() {
             return {
-                spikeInfoData: {},
+                seckillInfoData: {},
                 time: 30 * 60 * 1000 * 100,
             }
         },
@@ -70,8 +70,6 @@
 
             &-countdown {
                 float: left;
-
-                margin-top: 1px;
                 &-lt {
                     margin-top: 1px;
                     margin-left: 10px;
@@ -112,8 +110,8 @@
 
                 .van-icon {
                     margin-left: 2px;
-                    height: 22px;
-                    line-height: 22px;
+                    height: 24px;
+                    line-height: 24px;
                     float: right;
                 }
             }
