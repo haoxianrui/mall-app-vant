@@ -21,13 +21,13 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.1",
-    "@vue/cli-service": "^4.1.1",
+    "@vue/cli-service": "^5.0.8",
     "babel-plugin-import": "^1.12.1",
     "babel-plugin-lodash": "^3.3.4",
     "less": "^3.8.1",
     "less-loader": "^5.0.0",
     "mockjs": "^1.1.0",
-    "svg-sprite-loader": "^4.1.6",
+    "svg-sprite-loader": "^6.0.11",
     "vconsole": "^3.3.4",
     "vue-template-compiler": "^2.6.10"
   }
